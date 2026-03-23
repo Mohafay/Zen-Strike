@@ -18,10 +18,10 @@ export default function Footer() {
         </p>
 
         <a
-          href="mailto:hello@zenstrike.com"
+          href="mailto:mohamed@zen-strike.com"
           className="text-gray-400 text-sm hover:text-accent transition-colors"
         >
-          hello@zenstrike.com
+          mohamed@zen-strike.com
         </a>
       </div>
     </footer>
