@@ -16,7 +16,7 @@ export default function CTA() {
             Book a free discovery call and we&rsquo;ll show you exactly how AI automation
             can save your team time and drive more revenue.
           </p>
-          <a href="#" className="btn-primary text-lg">
+          <a href="https://calendly.com/mouhamedbachir-faye/30min" target="_blank" rel="noopener noreferrer" className="btn-primary text-lg">
             Book a Discovery Call
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
