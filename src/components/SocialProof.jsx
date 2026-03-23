@@ -6,6 +6,7 @@ const caseStudies = [
     metricLabel: 'hours saved per week',
     description:
       'Built an AI-powered content engine that generates, schedules, and posts authority-building LinkedIn content—eliminating hours of brainstorming and typing while growing his professional presence on autopilot.',
+    screenshot: '/screenshots/linkedin-engine.png',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
@@ -19,6 +20,7 @@ const caseStudies = [
     metricLabel: 'qualified leads contacted daily',
     description:
       'Deployed a scraping and outreach pipeline using LinkedIn Sales Navigator, automated enrichment, AI-personalized messages, and conditional follow-up sequences—turning cold outreach into a predictable pipeline.',
+    screenshot: '/screenshots/lead-gen.png',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
@@ -32,6 +34,7 @@ const caseStudies = [
     metricLabel: 'faster internal answers',
     description:
       'Built a searchable knowledge base that lets the team instantly find SOPs, client info, and institutional knowledge—reducing repetitive questions and onboarding time dramatically.',
+    screenshot: '/screenshots/knowledge-base.png',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
@@ -66,6 +69,22 @@ export default function SocialProof() {
               key={study.title}
               className={`card-glass p-8 flex flex-col reveal reveal-delay-${i + 1}`}
             >
+              {/* Screenshot preview */}
+              <div className="aspect-video rounded-xl overflow-hidden bg-dark-800/80 border border-white/[0.04] mb-6">
+                <img
+                  src={study.screenshot}
+                  alt={`${study.title} — screenshot`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+                <div className="w-full h-full items-center justify-center text-gray-600 text-sm" style={{ display: 'none' }}>
+                  Screenshot coming soon
+                </div>
+              </div>
+
               <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent mb-6">
                 {study.icon}
               </div>
