@@ -70,8 +70,8 @@ export default function About() {
                 <p className="text-gray-500 text-sm">Startups founded</p>
               </div>
               <div>
-                <p className="font-heading font-bold text-2xl gradient-text">AI-first</p>
-                <p className="text-gray-500 text-sm">Approach to every build</p>
+                <p className="font-heading font-bold text-2xl gradient-text">ROI</p>
+                <p className="text-gray-500 text-sm">Business outcome focus</p>
               </div>
               <div>
                 <p className="font-heading font-bold text-2xl gradient-text">100%</p>
