@@ -1,0 +1,161 @@
+{
+  "name": "Booking Confirmation & Scheduling",
+  "flow": [
+    {
+      "id": 1,
+      "module": "calendly:watchEvents",
+      "version": 1,
+      "parameters": {
+        "account": "{{YOUR_CALENDLY_CONNECTION}}",
+        "eventType": "invitee.created"
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": { "x": 0, "y": 0 },
+        "expect": [
+          { "name": "inviteeName", "type": "text" },
+          { "name": "inviteeEmail", "type": "text" },
+          { "name": "eventStartTime", "type": "date" },
+          { "name": "eventEndTime", "type": "date" },
+          { "name": "eventType", "type": "text" },
+          { "name": "answers", "type": "collection" }
+        ]
+      },
+      "notes": "TRIGGER — Fires when a prospect books a call via the Calendly link sent in the outreach email."
+    },
+    {
+      "id": 2,
+      "module": "google-sheets:searchRows",
+      "version": 2,
+      "parameters": {
+        "spreadsheetId": "{{YOUR_SPREADSHEET_ID}}",
+        "sheetId": "Prospects"
+      },
+      "mapper": {
+        "filter": {
+          "field": "email",
+          "operator": "equals",
+          "value": "{{1.inviteeEmail}}"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 250, "y": 0 }
+      },
+      "notes": "LOOKUP — Searches the prospect sheet by email to pull their full record (talent type, event date, budget, etc.)."
+    },
+    {
+      "id": 3,
+      "module": "google-calendar:createEvent",
+      "version": 4,
+      "parameters": {
+        "account": "{{YOUR_GOOGLE_CALENDAR_CONNECTION}}"
+      },
+      "mapper": {
+        "calendarId": "primary",
+        "summary": "Booking Call — {{1.inviteeName}} ({{2.talentType}})",
+        "description": "Prospect: {{1.inviteeName}}\nCompany: {{2.companyName}}\nTalent Needed: {{2.talentType}}\nEvent Type: {{2.eventType}}\nEvent Date: {{2.eventDate}}\nBudget: {{2.budget}}\n\nNotes: Auto-scheduled via Make.com booking automation.",
+        "start": "{{1.eventStartTime}}",
+        "end": "{{1.eventEndTime}}",
+        "attendees": [
+          { "email": "{{1.inviteeEmail}}" },
+          { "email": "{{YOUR_AGENT_EMAIL}}" }
+        ],
+        "reminders": {
+          "useDefault": false,
+          "overrides": [
+            { "method": "email", "minutes": 60 },
+            { "method": "popup", "minutes": 15 }
+          ]
+        }
+      },
+      "metadata": {
+        "designer": { "x": 500, "y": 0 }
+      },
+      "notes": "CALENDAR EVENT — Creates a Google Calendar event for the booking call with all prospect details in the description."
+    },
+    {
+      "id": 4,
+      "module": "gmail:sendEmail",
+      "version": 2,
+      "parameters": {
+        "account": "{{YOUR_GMAIL_CONNECTION}}"
+      },
+      "mapper": {
+        "to": "{{1.inviteeEmail}}",
+        "subject": "Your Booking Call is Confirmed! — {{2.talentType}} for {{2.eventType}}",
+        "htmlBody": "<p>Hi {{1.inviteeName}},</p><p>Great news! Your booking consultation call is confirmed for <strong>{{formatDate(1.eventStartTime, 'MMMM Do, YYYY [at] h:mm A')}}</strong>.</p><p>Here's what we'll cover:</p><ul><li>Available {{2.talentType}} talent for your {{2.eventType}}</li><li>Pricing and packages within your budget</li><li>Timeline and logistics for {{2.eventDate}}</li></ul><p>If you need to reschedule, simply use the link in your original calendar invite.</p><p>Looking forward to it!</p><p>Best,<br/>[Your Name]<br/>[Your Agency]</p>",
+        "fromName": "[Your Agency Name]"
+      },
+      "metadata": {
+        "designer": { "x": 750, "y": 0 }
+      },
+      "notes": "CONFIRMATION EMAIL — Sends a professional confirmation email to the prospect summarizing the call time and agenda."
+    },
+    {
+      "id": 5,
+      "module": "google-sheets:updateRow",
+      "version": 2,
+      "parameters": {
+        "spreadsheetId": "{{YOUR_SPREADSHEET_ID}}",
+        "sheetId": "Prospects"
+      },
+      "mapper": {
+        "rowNumber": "{{2.rowNumber}}",
+        "values": {
+          "status": "Call Scheduled",
+          "scheduledCallDate": "{{1.eventStartTime}}"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 1000, "y": 0 }
+      },
+      "notes": "UPDATE STATUS — Updates the prospect's status to 'Call Scheduled' with the date, keeping the pipeline accurate."
+    },
+    {
+      "id": 6,
+      "module": "hubspot:updateContact",
+      "version": 3,
+      "parameters": {
+        "account": "{{YOUR_HUBSPOT_CONNECTION}}"
+      },
+      "mapper": {
+        "email": "{{1.inviteeEmail}}",
+        "properties": {
+          "lifecyclestage": "salesqualifiedlead",
+          "hs_lead_status": "Call Scheduled",
+          "scheduled_call_date": "{{1.eventStartTime}}"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 1000, "y": 200 }
+      },
+      "notes": "CRM UPDATE — Promotes the contact to 'Sales Qualified Lead' in HubSpot since they've booked a call."
+    },
+    {
+      "id": 7,
+      "module": "slack:sendMessage",
+      "version": 2,
+      "parameters": {
+        "account": "{{YOUR_SLACK_CONNECTION}}"
+      },
+      "mapper": {
+        "channel": "#bookings",
+        "text": "📞 *New Booking Call Scheduled!*\n• Prospect: {{1.inviteeName}}\n• Company: {{2.companyName}}\n• Talent: {{2.talentType}}\n• Event: {{2.eventType}} on {{2.eventDate}}\n• Call Time: {{formatDate(1.eventStartTime, 'MMM Do [at] h:mm A')}}\n• Budget: {{2.budget}}"
+      },
+      "metadata": {
+        "designer": { "x": 750, "y": 200 }
+      },
+      "notes": "SLACK NOTIFICATION — Alerts the bookings team channel so an agent can prepare for the upcoming call."
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "scenario": {
+      "name": "Scenario 2: Booking Confirmation & Scheduling",
+      "description": "When a prospect books a call via Calendly, creates a calendar event, sends confirmation email, updates CRM, and notifies the team."
+    },
+    "scheduling": {
+      "type": "webhook"
+    }
+  }
+}

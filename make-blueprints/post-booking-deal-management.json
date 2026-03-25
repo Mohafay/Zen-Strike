@@ -1,0 +1,139 @@
+{
+  "name": "Post-Booking Deal Management",
+  "flow": [
+    {
+      "id": 1,
+      "module": "hubspot:watchDeals",
+      "version": 2,
+      "parameters": {
+        "account": "{{YOUR_HUBSPOT_CONNECTION}}",
+        "pipeline": "Talent Bookings",
+        "stage": "Closed Won"
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": { "x": 0, "y": 0 },
+        "expect": [
+          { "name": "dealId", "type": "text" },
+          { "name": "dealName", "type": "text" },
+          { "name": "contactEmail", "type": "text" },
+          { "name": "contactName", "type": "text" },
+          { "name": "talentType", "type": "text" },
+          { "name": "eventDate", "type": "text" },
+          { "name": "eventVenue", "type": "text" },
+          { "name": "amount", "type": "number" }
+        ]
+      },
+      "notes": "TRIGGER — Fires when a deal moves to 'Closed Won' in the Talent Bookings pipeline (i.e., the client has confirmed and paid)."
+    },
+    {
+      "id": 2,
+      "module": "gmail:sendEmail",
+      "version": 2,
+      "parameters": {
+        "account": "{{YOUR_GMAIL_CONNECTION}}"
+      },
+      "mapper": {
+        "to": "{{1.contactEmail}}",
+        "subject": "Booking Confirmed! — {{1.talentType}} for {{1.eventDate}}",
+        "htmlBody": "<p>Hi {{1.contactName}},</p><p>Your booking is officially confirmed! Here's a summary:</p><table style='border-collapse:collapse;width:100%'><tr><td style='padding:8px;border:1px solid #ddd'><strong>Talent</strong></td><td style='padding:8px;border:1px solid #ddd'>{{1.talentType}}</td></tr><tr><td style='padding:8px;border:1px solid #ddd'><strong>Event Date</strong></td><td style='padding:8px;border:1px solid #ddd'>{{1.eventDate}}</td></tr><tr><td style='padding:8px;border:1px solid #ddd'><strong>Venue</strong></td><td style='padding:8px;border:1px solid #ddd'>{{1.eventVenue}}</td></tr><tr><td style='padding:8px;border:1px solid #ddd'><strong>Amount</strong></td><td style='padding:8px;border:1px solid #ddd'>${{1.amount}}</td></tr></table><p>We'll be in touch closer to the event date with logistics details. If you have any questions, just reply to this email.</p><p>Thank you for choosing [Your Agency]!</p>",
+        "fromName": "[Your Agency Name]"
+      },
+      "metadata": {
+        "designer": { "x": 250, "y": 0 }
+      },
+      "notes": "BOOKING CONFIRMATION — Sends the client a final confirmation email with a summary of their booked talent, date, venue, and price."
+    },
+    {
+      "id": 3,
+      "module": "gmail:sendEmail",
+      "version": 2,
+      "parameters": {
+        "account": "{{YOUR_GMAIL_CONNECTION}}"
+      },
+      "mapper": {
+        "to": "{{TALENT_EMAIL}}",
+        "subject": "New Booking Assignment — {{1.eventDate}} at {{1.eventVenue}}",
+        "htmlBody": "<p>Hi,</p><p>You've been booked for an upcoming event. Here are the details:</p><ul><li><strong>Client:</strong> {{1.contactName}}</li><li><strong>Event Date:</strong> {{1.eventDate}}</li><li><strong>Venue:</strong> {{1.eventVenue}}</li><li><strong>Deal:</strong> {{1.dealName}}</li></ul><p>Please confirm your availability by replying to this email within 24 hours.</p><p>Thanks,<br/>[Your Agency]</p>",
+        "fromName": "[Your Agency Name]"
+      },
+      "metadata": {
+        "designer": { "x": 250, "y": 200 }
+      },
+      "notes": "TALENT NOTIFICATION — Emails the booked talent with event details so they can confirm availability and prepare."
+    },
+    {
+      "id": 4,
+      "module": "google-sheets:addRow",
+      "version": 2,
+      "parameters": {
+        "spreadsheetId": "{{YOUR_SPREADSHEET_ID}}",
+        "sheetId": "Confirmed Bookings"
+      },
+      "mapper": {
+        "values": {
+          "dealId": "{{1.dealId}}",
+          "clientName": "{{1.contactName}}",
+          "clientEmail": "{{1.contactEmail}}",
+          "talentType": "{{1.talentType}}",
+          "eventDate": "{{1.eventDate}}",
+          "venue": "{{1.eventVenue}}",
+          "amount": "{{1.amount}}",
+          "status": "Confirmed",
+          "bookedOn": "{{now}}"
+        }
+      },
+      "metadata": {
+        "designer": { "x": 500, "y": 0 }
+      },
+      "notes": "LOG BOOKING — Adds the confirmed booking to a 'Confirmed Bookings' sheet for operations tracking and reporting."
+    },
+    {
+      "id": 5,
+      "module": "google-calendar:createEvent",
+      "version": 4,
+      "parameters": {
+        "account": "{{YOUR_GOOGLE_CALENDAR_CONNECTION}}"
+      },
+      "mapper": {
+        "calendarId": "{{BOOKINGS_CALENDAR_ID}}",
+        "summary": "EVENT: {{1.talentType}} — {{1.contactName}} at {{1.eventVenue}}",
+        "description": "Client: {{1.contactName}}\nTalent: {{1.talentType}}\nVenue: {{1.eventVenue}}\nDeal Value: ${{1.amount}}\nDeal ID: {{1.dealId}}",
+        "start": "{{1.eventDate}}",
+        "end": "{{1.eventDate}}",
+        "colorId": "10"
+      },
+      "metadata": {
+        "designer": { "x": 500, "y": 200 }
+      },
+      "notes": "EVENT CALENDAR — Creates an all-day event on the bookings calendar so the team sees the confirmed gig at a glance."
+    },
+    {
+      "id": 6,
+      "module": "slack:sendMessage",
+      "version": 2,
+      "parameters": {
+        "account": "{{YOUR_SLACK_CONNECTION}}"
+      },
+      "mapper": {
+        "channel": "#bookings",
+        "text": "🎉 *Deal Closed!*\n• Client: {{1.contactName}}\n• Talent: {{1.talentType}}\n• Event: {{1.eventDate}} at {{1.eventVenue}}\n• Value: ${{1.amount}}"
+      },
+      "metadata": {
+        "designer": { "x": 750, "y": 0 }
+      },
+      "notes": "TEAM ALERT — Posts a celebration message in the #bookings Slack channel so the whole team knows about the new deal."
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "scenario": {
+      "name": "Scenario 3: Post-Booking Deal Management",
+      "description": "When a deal is marked Closed Won in CRM, sends confirmations to client and talent, logs the booking, creates a calendar event, and alerts the team."
+    },
+    "scheduling": {
+      "type": "interval",
+      "interval": 900
+    }
+  }
+}
