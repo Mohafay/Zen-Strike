@@ -1,199 +1,357 @@
 {
-  "name": "Automated Booking Agency",
+  "name": "Prospect Outreach & Contact",
   "flow": [
     {
       "id": 1,
       "module": "google-sheets:watchRows",
       "version": 2,
       "parameters": {
-        "spreadsheetId": "{{YOUR_SPREADSHEET_ID}}",
-        "sheetId": "Prospects",
+        "__IMTCONN__": 0
+      },
+      "mapper": {
+        "from": 0,
         "limit": 10,
-        "includesHeaders": true
+        "sheetId": "Prospects",
+        "includesHeaders": "yes",
+        "valueRenderOption": "FORMATTED_VALUE",
+        "dateTimeRenderOption": "FORMATTED_STRING"
       },
-      "mapper": {},
       "metadata": {
-        "designer": { "x": 0, "y": 0 },
-        "restore": {},
-        "expect": [
-          { "name": "rowNumber", "type": "number" },
-          { "name": "prospectName", "type": "text" },
-          { "name": "companyName", "type": "text" },
-          { "name": "email", "type": "text" },
-          { "name": "phone", "type": "text" },
-          { "name": "talentType", "type": "text" },
-          { "name": "eventDate", "type": "text" },
-          { "name": "eventType", "type": "text" },
-          { "name": "budget", "type": "text" },
-          { "name": "status", "type": "text" }
+        "designer": {
+          "x": 0,
+          "y": 0
+        },
+        "restore": {
+          "parameters": {
+            "__IMTCONN__": {
+              "label": "My Google connection",
+              "data": {
+                "scoped": "true",
+                "connection": "google"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "__IMTCONN__",
+            "type": "account",
+            "label": "Connection",
+            "required": true
+          }
         ]
-      },
-      "notes": "TRIGGER — Watches Google Sheet for new prospect rows added by the sales team or scraped from lead sources."
+      }
     },
     {
       "id": 2,
-      "module": "builtin:filters",
+      "module": "builtin:BasicFilter",
       "version": 1,
       "parameters": {
         "conditions": [
-          {
-            "a": "{{1.status}}",
-            "o": "text:equal",
-            "b": "New"
-          }
+          [
+            {
+              "a": "{{1.`9`}}",
+              "b": "New",
+              "o": "text:equal"
+            }
+          ]
         ]
       },
       "metadata": {
-        "designer": { "x": 250, "y": 0 }
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
       },
-      "notes": "FILTER — Only processes rows where status = 'New' so already-contacted prospects are skipped."
+      "filter": {
+        "name": "Only New Prospects",
+        "conditions": [
+          [
+            {
+              "a": "{{1.`9`}}",
+              "b": "New",
+              "o": "text:equal"
+            }
+          ]
+        ]
+      }
     },
     {
       "id": 3,
-      "module": "router",
+      "module": "builtin:BasicRouter",
       "version": 1,
       "parameters": {},
+      "mapper": null,
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      },
       "routes": [
         {
-          "name": "Email Outreach Path",
-          "flow": [4, 5, 6]
+          "flow": [
+            {
+              "id": 4,
+              "module": "gmail:ActionSendEmail",
+              "version": 1,
+              "parameters": {
+                "__IMTCONN__": 0
+              },
+              "mapper": {
+                "to": "{{1.`3`}}",
+                "cc": "",
+                "bcc": "",
+                "from": "",
+                "subject": "Booking Opportunity — {{1.`5`}} for {{1.`7`}}",
+                "content": "<p>Hi {{1.`1`}},</p>\n<p>I'm reaching out from <strong>[Your Agency Name]</strong> regarding your upcoming <strong>{{1.`7`}}</strong> on <strong>{{1.`6`}}</strong>.</p>\n<p>We have top-tier <strong>{{1.`5`}}</strong> talent available that would be a perfect fit for your event. I'd love to schedule a quick call to discuss details and availability.</p>\n<p>You can book a time directly here: <a href=\"[YOUR_CALENDLY_LINK]\">Schedule a Call</a></p>\n<p>Looking forward to connecting!</p>\n<p>Best regards,<br/>[Your Name]<br/>[Your Agency]</p>",
+                "attachments": []
+              },
+              "metadata": {
+                "designer": {
+                  "x": 900,
+                  "y": -300
+                },
+                "restore": {
+                  "parameters": {
+                    "__IMTCONN__": {
+                      "label": "My Gmail connection",
+                      "data": {
+                        "scoped": "true",
+                        "connection": "google-email"
+                      }
+                    }
+                  }
+                },
+                "parameters": [
+                  {
+                    "name": "__IMTCONN__",
+                    "type": "account",
+                    "label": "Connection",
+                    "required": true
+                  }
+                ],
+                "expect": [
+                  { "name": "to", "type": "text", "label": "To", "required": true },
+                  { "name": "subject", "type": "text", "label": "Subject", "required": true },
+                  { "name": "content", "type": "text", "label": "Content" }
+                ]
+              }
+            },
+            {
+              "id": 5,
+              "module": "builtin:Sleep",
+              "version": 1,
+              "parameters": {
+                "delay": 259200
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1200,
+                  "y": -300
+                }
+              }
+            },
+            {
+              "id": 6,
+              "module": "gmail:ActionSendEmail",
+              "version": 1,
+              "parameters": {
+                "__IMTCONN__": 0
+              },
+              "mapper": {
+                "to": "{{1.`3`}}",
+                "cc": "",
+                "bcc": "",
+                "from": "",
+                "subject": "Re: Booking Opportunity — {{1.`5`}} for {{1.`7`}}",
+                "content": "<p>Hi {{1.`1`}},</p>\n<p>Just following up on my earlier email about your <strong>{{1.`7`}}</strong>. We still have availability for <strong>{{1.`5`}}</strong> talent on <strong>{{1.`6`}}</strong>.</p>\n<p>Would you like to hop on a quick 10-minute call this week? Book a time here: <a href=\"[YOUR_CALENDLY_LINK]\">Schedule a Call</a></p>\n<p>Best,<br/>[Your Name]</p>",
+                "attachments": []
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1500,
+                  "y": -300
+                },
+                "restore": {
+                  "parameters": {
+                    "__IMTCONN__": {
+                      "label": "My Gmail connection",
+                      "data": {
+                        "scoped": "true",
+                        "connection": "google-email"
+                      }
+                    }
+                  }
+                },
+                "parameters": [
+                  {
+                    "name": "__IMTCONN__",
+                    "type": "account",
+                    "label": "Connection",
+                    "required": true
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
-          "name": "Phone Call Path",
-          "flow": [10, 11]
+          "flow": [
+            {
+              "id": 7,
+              "module": "twilio:ActionMakeCall",
+              "version": 1,
+              "parameters": {
+                "__IMTCONN__": 0
+              },
+              "mapper": {
+                "to": "{{1.`4`}}",
+                "from": "[YOUR_TWILIO_PHONE_NUMBER]",
+                "twiml": "<Response><Say voice=\"alice\">Hello {{1.`1`}}. This is a courtesy call from Your Agency Name regarding your upcoming {{1.`7`}}. We have {{1.`5`}} talent available for your event on {{1.`6`}}. Please check your email for details or press 1 to be connected with a booking agent.</Say><Gather numDigits=\"1\" action=\"[YOUR_WEBHOOK_URL]\"><Say>Press 1 to speak with an agent now.</Say></Gather></Response>"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 900,
+                  "y": 0
+                },
+                "restore": {
+                  "parameters": {
+                    "__IMTCONN__": {
+                      "label": "My Twilio connection",
+                      "data": {
+                        "scoped": "true",
+                        "connection": "twilio"
+                      }
+                    }
+                  }
+                },
+                "parameters": [
+                  {
+                    "name": "__IMTCONN__",
+                    "type": "account",
+                    "label": "Connection",
+                    "required": true
+                  }
+                ]
+              }
+            },
+            {
+              "id": 8,
+              "module": "google-sheets:updateRow",
+              "version": 2,
+              "parameters": {
+                "__IMTCONN__": 0
+              },
+              "mapper": {
+                "sheetId": "Prospects",
+                "rowNumber": "{{1.__ROW_NUMBER__}}",
+                "values": {
+                  "9": "Contacted",
+                  "10": "{{now}}",
+                  "11": "Phone + Email"
+                }
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1200,
+                  "y": 0
+                },
+                "restore": {
+                  "parameters": {
+                    "__IMTCONN__": {
+                      "label": "My Google connection",
+                      "data": {
+                        "scoped": "true",
+                        "connection": "google"
+                      }
+                    }
+                  }
+                },
+                "parameters": [
+                  {
+                    "name": "__IMTCONN__",
+                    "type": "account",
+                    "label": "Connection",
+                    "required": true
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
-          "name": "CRM Logging Path",
-          "flow": [12]
+          "flow": [
+            {
+              "id": 9,
+              "module": "hubspot:ActionCreateUpdateContact",
+              "version": 3,
+              "parameters": {
+                "__IMTCONN__": 0
+              },
+              "mapper": {
+                "email": "{{1.`3`}}",
+                "firstname": "{{1.`1`}}",
+                "company": "{{1.`2`}}",
+                "phone": "{{1.`4`}}",
+                "lifecyclestage": "lead",
+                "customProperties": [
+                  { "property": "talent_type_needed", "value": "{{1.`5`}}" },
+                  { "property": "event_date", "value": "{{1.`6`}}" },
+                  { "property": "event_type", "value": "{{1.`7`}}" },
+                  { "property": "budget", "value": "{{1.`8`}}" },
+                  { "property": "lead_source", "value": "Automated Outreach" }
+                ]
+              },
+              "metadata": {
+                "designer": {
+                  "x": 900,
+                  "y": 300
+                },
+                "restore": {
+                  "parameters": {
+                    "__IMTCONN__": {
+                      "label": "My HubSpot connection",
+                      "data": {
+                        "scoped": "true",
+                        "connection": "hubspot"
+                      }
+                    }
+                  }
+                },
+                "parameters": [
+                  {
+                    "name": "__IMTCONN__",
+                    "type": "account",
+                    "label": "Connection",
+                    "required": true
+                  }
+                ]
+              }
+            }
+          ]
         }
-      ],
-      "metadata": {
-        "designer": { "x": 500, "y": 0 }
-      },
-      "notes": "ROUTER — Splits the flow into three parallel paths: Email Outreach, Phone Call, and CRM Logging."
-    },
-    {
-      "id": 4,
-      "module": "gmail:sendEmail",
-      "version": 2,
-      "parameters": {
-        "account": "{{YOUR_GMAIL_CONNECTION}}"
-      },
-      "mapper": {
-        "to": "{{1.email}}",
-        "subject": "Booking Opportunity — {{1.talentType}} for {{1.eventType}}",
-        "htmlBody": "<p>Hi {{1.prospectName}},</p><p>I'm reaching out from <strong>[Your Agency Name]</strong> regarding your upcoming <strong>{{1.eventType}}</strong> on <strong>{{1.eventDate}}</strong>.</p><p>We have top-tier <strong>{{1.talentType}}</strong> talent available that would be a perfect fit for your event. I'd love to schedule a quick call to discuss details and availability.</p><p>You can book a time directly here: <a href='{{YOUR_CALENDLY_LINK}}'>Schedule a Call</a></p><p>Looking forward to connecting!</p><p>Best regards,<br/>[Your Name]<br/>[Your Agency]</p>",
-        "fromName": "[Your Agency Name]"
-      },
-      "metadata": {
-        "designer": { "x": 750, "y": -200 }
-      },
-      "notes": "EMAIL — Sends a personalized outreach email to the prospect with event details and a Calendly scheduling link."
-    },
-    {
-      "id": 5,
-      "module": "builtin:sleep",
-      "version": 1,
-      "parameters": {
-        "delay": 259200
-      },
-      "metadata": {
-        "designer": { "x": 1000, "y": -200 }
-      },
-      "notes": "DELAY — Waits 3 days (259200 seconds) before sending a follow-up email if no response."
-    },
-    {
-      "id": 6,
-      "module": "gmail:sendEmail",
-      "version": 2,
-      "parameters": {
-        "account": "{{YOUR_GMAIL_CONNECTION}}"
-      },
-      "mapper": {
-        "to": "{{1.email}}",
-        "subject": "Re: Booking Opportunity — {{1.talentType}} for {{1.eventType}}",
-        "htmlBody": "<p>Hi {{1.prospectName}},</p><p>Just following up on my earlier email about your <strong>{{1.eventType}}</strong>. We still have availability for <strong>{{1.talentType}}</strong> talent on <strong>{{1.eventDate}}</strong>.</p><p>Would you like to hop on a quick 10-minute call this week? Book a time here: <a href='{{YOUR_CALENDLY_LINK}}'>Schedule a Call</a></p><p>Best,<br/>[Your Name]</p>",
-        "fromName": "[Your Agency Name]"
-      },
-      "metadata": {
-        "designer": { "x": 1250, "y": -200 }
-      },
-      "notes": "FOLLOW-UP EMAIL — Sends an automated follow-up email 3 days after the initial outreach if the prospect hasn't responded."
-    },
-    {
-      "id": 10,
-      "module": "twilio:makeCall",
-      "version": 1,
-      "parameters": {
-        "account": "{{YOUR_TWILIO_CONNECTION}}"
-      },
-      "mapper": {
-        "to": "{{1.phone}}",
-        "from": "{{YOUR_TWILIO_PHONE_NUMBER}}",
-        "twiml": "<Response><Say voice='alice'>Hello {{1.prospectName}}. This is a courtesy call from Your Agency Name regarding your upcoming {{1.eventType}}. We have {{1.talentType}} talent available for your event on {{1.eventDate}}. Please check your email for details or press 1 to be connected with a booking agent.</Say><Gather numDigits='1' action='{{YOUR_WEBHOOK_URL}}'><Say>Press 1 to speak with an agent now.</Say></Gather></Response>"
-      },
-      "metadata": {
-        "designer": { "x": 750, "y": 0 }
-      },
-      "notes": "PHONE CALL — Uses Twilio to place an automated outreach call to the prospect with a text-to-speech message and option to connect live."
-    },
-    {
-      "id": 11,
-      "module": "google-sheets:updateRow",
-      "version": 2,
-      "parameters": {
-        "spreadsheetId": "{{YOUR_SPREADSHEET_ID}}",
-        "sheetId": "Prospects"
-      },
-      "mapper": {
-        "rowNumber": "{{1.rowNumber}}",
-        "values": {
-          "status": "Contacted",
-          "lastContactDate": "{{now}}",
-          "contactMethod": "Phone + Email"
-        }
-      },
-      "metadata": {
-        "designer": { "x": 1000, "y": 0 }
-      },
-      "notes": "UPDATE SHEET — Marks the prospect row as 'Contacted' with a timestamp so they aren't processed again."
-    },
-    {
-      "id": 12,
-      "module": "hubspot:createOrUpdateContact",
-      "version": 3,
-      "parameters": {
-        "account": "{{YOUR_HUBSPOT_CONNECTION}}"
-      },
-      "mapper": {
-        "email": "{{1.email}}",
-        "properties": {
-          "firstname": "{{1.prospectName}}",
-          "company": "{{1.companyName}}",
-          "phone": "{{1.phone}}",
-          "talent_type_needed": "{{1.talentType}}",
-          "event_date": "{{1.eventDate}}",
-          "event_type": "{{1.eventType}}",
-          "budget": "{{1.budget}}",
-          "lifecyclestage": "lead",
-          "lead_source": "Automated Outreach"
-        }
-      },
-      "metadata": {
-        "designer": { "x": 750, "y": 200 }
-      },
-      "notes": "CRM — Creates or updates a contact in HubSpot CRM with all prospect details for pipeline tracking and reporting."
+      ]
     }
   ],
   "metadata": {
+    "instant": false,
     "version": 1,
     "scenario": {
-      "name": "Scenario 1: Prospect Outreach & Contact",
-      "description": "Watches for new prospects, sends personalized outreach emails and automated phone calls, logs everything to CRM."
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
     },
-    "scheduling": {
-      "interval": 900,
-      "type": "interval"
-    }
+    "designer": {
+      "orphans": []
+    },
+    "zone": "us1.make.com"
   }
 }

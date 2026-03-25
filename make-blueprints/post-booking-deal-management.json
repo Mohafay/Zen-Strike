@@ -3,137 +3,302 @@
   "flow": [
     {
       "id": 1,
-      "module": "hubspot:watchDeals",
+      "module": "hubspot:TriggerWatchDeals",
       "version": 2,
       "parameters": {
-        "account": "{{YOUR_HUBSPOT_CONNECTION}}",
-        "pipeline": "Talent Bookings",
-        "stage": "Closed Won"
+        "__IMTCONN__": 0,
+        "pipeline": "",
+        "dealstage": "closedwon",
+        "limit": 10
       },
       "mapper": {},
       "metadata": {
-        "designer": { "x": 0, "y": 0 },
-        "expect": [
-          { "name": "dealId", "type": "text" },
-          { "name": "dealName", "type": "text" },
-          { "name": "contactEmail", "type": "text" },
-          { "name": "contactName", "type": "text" },
-          { "name": "talentType", "type": "text" },
-          { "name": "eventDate", "type": "text" },
-          { "name": "eventVenue", "type": "text" },
-          { "name": "amount", "type": "number" }
+        "designer": {
+          "x": 0,
+          "y": 0
+        },
+        "restore": {
+          "parameters": {
+            "__IMTCONN__": {
+              "label": "My HubSpot connection",
+              "data": {
+                "scoped": "true",
+                "connection": "hubspot"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "__IMTCONN__",
+            "type": "account",
+            "label": "Connection",
+            "required": true
+          }
         ]
-      },
-      "notes": "TRIGGER — Fires when a deal moves to 'Closed Won' in the Talent Bookings pipeline (i.e., the client has confirmed and paid)."
+      }
     },
     {
       "id": 2,
-      "module": "gmail:sendEmail",
-      "version": 2,
+      "module": "hubspot:ActionGetContact",
+      "version": 3,
       "parameters": {
-        "account": "{{YOUR_GMAIL_CONNECTION}}"
+        "__IMTCONN__": 0
       },
       "mapper": {
-        "to": "{{1.contactEmail}}",
-        "subject": "Booking Confirmed! — {{1.talentType}} for {{1.eventDate}}",
-        "htmlBody": "<p>Hi {{1.contactName}},</p><p>Your booking is officially confirmed! Here's a summary:</p><table style='border-collapse:collapse;width:100%'><tr><td style='padding:8px;border:1px solid #ddd'><strong>Talent</strong></td><td style='padding:8px;border:1px solid #ddd'>{{1.talentType}}</td></tr><tr><td style='padding:8px;border:1px solid #ddd'><strong>Event Date</strong></td><td style='padding:8px;border:1px solid #ddd'>{{1.eventDate}}</td></tr><tr><td style='padding:8px;border:1px solid #ddd'><strong>Venue</strong></td><td style='padding:8px;border:1px solid #ddd'>{{1.eventVenue}}</td></tr><tr><td style='padding:8px;border:1px solid #ddd'><strong>Amount</strong></td><td style='padding:8px;border:1px solid #ddd'>${{1.amount}}</td></tr></table><p>We'll be in touch closer to the event date with logistics details. If you have any questions, just reply to this email.</p><p>Thank you for choosing [Your Agency]!</p>",
-        "fromName": "[Your Agency Name]"
+        "contactId": "{{1.associations.contacts[0]}}"
       },
       "metadata": {
-        "designer": { "x": 250, "y": 0 }
-      },
-      "notes": "BOOKING CONFIRMATION — Sends the client a final confirmation email with a summary of their booked talent, date, venue, and price."
+        "designer": {
+          "x": 300,
+          "y": 0
+        },
+        "restore": {
+          "parameters": {
+            "__IMTCONN__": {
+              "label": "My HubSpot connection",
+              "data": {
+                "scoped": "true",
+                "connection": "hubspot"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "__IMTCONN__",
+            "type": "account",
+            "label": "Connection",
+            "required": true
+          }
+        ]
+      }
     },
     {
       "id": 3,
-      "module": "gmail:sendEmail",
-      "version": 2,
+      "module": "gmail:ActionSendEmail",
+      "version": 1,
       "parameters": {
-        "account": "{{YOUR_GMAIL_CONNECTION}}"
+        "__IMTCONN__": 0
       },
       "mapper": {
-        "to": "{{TALENT_EMAIL}}",
-        "subject": "New Booking Assignment — {{1.eventDate}} at {{1.eventVenue}}",
-        "htmlBody": "<p>Hi,</p><p>You've been booked for an upcoming event. Here are the details:</p><ul><li><strong>Client:</strong> {{1.contactName}}</li><li><strong>Event Date:</strong> {{1.eventDate}}</li><li><strong>Venue:</strong> {{1.eventVenue}}</li><li><strong>Deal:</strong> {{1.dealName}}</li></ul><p>Please confirm your availability by replying to this email within 24 hours.</p><p>Thanks,<br/>[Your Agency]</p>",
-        "fromName": "[Your Agency Name]"
+        "to": "{{2.email}}",
+        "subject": "Booking Confirmed! — {{1.talent_type}} for {{1.event_date}}",
+        "content": "<p>Hi {{2.firstname}},</p>\n<p>Your booking is officially confirmed! Here's a summary:</p>\n<table style=\"border-collapse:collapse;width:100%\">\n<tr><td style=\"padding:8px;border:1px solid #ddd\"><strong>Talent</strong></td><td style=\"padding:8px;border:1px solid #ddd\">{{1.talent_type}}</td></tr>\n<tr><td style=\"padding:8px;border:1px solid #ddd\"><strong>Event Date</strong></td><td style=\"padding:8px;border:1px solid #ddd\">{{1.event_date}}</td></tr>\n<tr><td style=\"padding:8px;border:1px solid #ddd\"><strong>Venue</strong></td><td style=\"padding:8px;border:1px solid #ddd\">{{1.event_venue}}</td></tr>\n<tr><td style=\"padding:8px;border:1px solid #ddd\"><strong>Amount</strong></td><td style=\"padding:8px;border:1px solid #ddd\">${{1.amount}}</td></tr>\n</table>\n<p>We'll be in touch closer to the event date with logistics details. If you have any questions, just reply to this email.</p>\n<p>Thank you for choosing [Your Agency]!</p>",
+        "attachments": []
       },
       "metadata": {
-        "designer": { "x": 250, "y": 200 }
-      },
-      "notes": "TALENT NOTIFICATION — Emails the booked talent with event details so they can confirm availability and prepare."
+        "designer": {
+          "x": 600,
+          "y": -150
+        },
+        "restore": {
+          "parameters": {
+            "__IMTCONN__": {
+              "label": "My Gmail connection",
+              "data": {
+                "scoped": "true",
+                "connection": "google-email"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "__IMTCONN__",
+            "type": "account",
+            "label": "Connection",
+            "required": true
+          }
+        ]
+      }
     },
     {
       "id": 4,
-      "module": "google-sheets:addRow",
-      "version": 2,
+      "module": "gmail:ActionSendEmail",
+      "version": 1,
       "parameters": {
-        "spreadsheetId": "{{YOUR_SPREADSHEET_ID}}",
-        "sheetId": "Confirmed Bookings"
+        "__IMTCONN__": 0
       },
       "mapper": {
-        "values": {
-          "dealId": "{{1.dealId}}",
-          "clientName": "{{1.contactName}}",
-          "clientEmail": "{{1.contactEmail}}",
-          "talentType": "{{1.talentType}}",
-          "eventDate": "{{1.eventDate}}",
-          "venue": "{{1.eventVenue}}",
-          "amount": "{{1.amount}}",
-          "status": "Confirmed",
-          "bookedOn": "{{now}}"
-        }
+        "to": "[TALENT_EMAIL_ADDRESS]",
+        "subject": "New Booking Assignment — {{1.event_date}} at {{1.event_venue}}",
+        "content": "<p>Hi,</p>\n<p>You've been booked for an upcoming event. Here are the details:</p>\n<ul>\n<li><strong>Client:</strong> {{2.firstname}} {{2.lastname}}</li>\n<li><strong>Event Date:</strong> {{1.event_date}}</li>\n<li><strong>Venue:</strong> {{1.event_venue}}</li>\n<li><strong>Deal:</strong> {{1.dealname}}</li>\n</ul>\n<p>Please confirm your availability by replying to this email within 24 hours.</p>\n<p>Thanks,<br/>[Your Agency]</p>",
+        "attachments": []
       },
       "metadata": {
-        "designer": { "x": 500, "y": 0 }
-      },
-      "notes": "LOG BOOKING — Adds the confirmed booking to a 'Confirmed Bookings' sheet for operations tracking and reporting."
+        "designer": {
+          "x": 600,
+          "y": 150
+        },
+        "restore": {
+          "parameters": {
+            "__IMTCONN__": {
+              "label": "My Gmail connection",
+              "data": {
+                "scoped": "true",
+                "connection": "google-email"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "__IMTCONN__",
+            "type": "account",
+            "label": "Connection",
+            "required": true
+          }
+        ]
+      }
     },
     {
       "id": 5,
-      "module": "google-calendar:createEvent",
-      "version": 4,
+      "module": "google-sheets:ActionAddRow",
+      "version": 2,
       "parameters": {
-        "account": "{{YOUR_GOOGLE_CALENDAR_CONNECTION}}"
+        "__IMTCONN__": 0
       },
       "mapper": {
-        "calendarId": "{{BOOKINGS_CALENDAR_ID}}",
-        "summary": "EVENT: {{1.talentType}} — {{1.contactName}} at {{1.eventVenue}}",
-        "description": "Client: {{1.contactName}}\nTalent: {{1.talentType}}\nVenue: {{1.eventVenue}}\nDeal Value: ${{1.amount}}\nDeal ID: {{1.dealId}}",
-        "start": "{{1.eventDate}}",
-        "end": "{{1.eventDate}}",
-        "colorId": "10"
+        "sheetId": "Confirmed Bookings",
+        "includesHeaders": "yes",
+        "values": [
+          "{{1.dealId}}",
+          "{{2.firstname}} {{2.lastname}}",
+          "{{2.email}}",
+          "{{1.talent_type}}",
+          "{{1.event_date}}",
+          "{{1.event_venue}}",
+          "{{1.amount}}",
+          "Confirmed",
+          "{{now}}"
+        ]
       },
       "metadata": {
-        "designer": { "x": 500, "y": 200 }
-      },
-      "notes": "EVENT CALENDAR — Creates an all-day event on the bookings calendar so the team sees the confirmed gig at a glance."
+        "designer": {
+          "x": 900,
+          "y": -150
+        },
+        "restore": {
+          "parameters": {
+            "__IMTCONN__": {
+              "label": "My Google connection",
+              "data": {
+                "scoped": "true",
+                "connection": "google"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "__IMTCONN__",
+            "type": "account",
+            "label": "Connection",
+            "required": true
+          }
+        ]
+      }
     },
     {
       "id": 6,
-      "module": "slack:sendMessage",
+      "module": "google-calendar:ActionCreateEvent",
+      "version": 4,
+      "parameters": {
+        "__IMTCONN__": 0
+      },
+      "mapper": {
+        "calendarId": "primary",
+        "summary": "EVENT: {{1.talent_type}} — {{2.firstname}} at {{1.event_venue}}",
+        "description": "Client: {{2.firstname}} {{2.lastname}}\nTalent: {{1.talent_type}}\nVenue: {{1.event_venue}}\nDeal Value: ${{1.amount}}\nDeal ID: {{1.dealId}}",
+        "start": "{{1.event_date}}",
+        "end": "{{1.event_date}}",
+        "allDay": true,
+        "colorId": "10",
+        "sendUpdates": "none"
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 150
+        },
+        "restore": {
+          "parameters": {
+            "__IMTCONN__": {
+              "label": "My Google Calendar connection",
+              "data": {
+                "scoped": "true",
+                "connection": "google-calendar"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "__IMTCONN__",
+            "type": "account",
+            "label": "Connection",
+            "required": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "module": "slack:ActionPostMessage",
       "version": 2,
       "parameters": {
-        "account": "{{YOUR_SLACK_CONNECTION}}"
+        "__IMTCONN__": 0
       },
       "mapper": {
         "channel": "#bookings",
-        "text": "🎉 *Deal Closed!*\n• Client: {{1.contactName}}\n• Talent: {{1.talentType}}\n• Event: {{1.eventDate}} at {{1.eventVenue}}\n• Value: ${{1.amount}}"
+        "text": "*Deal Closed!*\n- Client: {{2.firstname}} {{2.lastname}}\n- Talent: {{1.talent_type}}\n- Event: {{1.event_date}} at {{1.event_venue}}\n- Value: ${{1.amount}}"
       },
       "metadata": {
-        "designer": { "x": 750, "y": 0 }
-      },
-      "notes": "TEAM ALERT — Posts a celebration message in the #bookings Slack channel so the whole team knows about the new deal."
+        "designer": {
+          "x": 1200,
+          "y": 0
+        },
+        "restore": {
+          "parameters": {
+            "__IMTCONN__": {
+              "label": "My Slack connection",
+              "data": {
+                "scoped": "true",
+                "connection": "slack"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "__IMTCONN__",
+            "type": "account",
+            "label": "Connection",
+            "required": true
+          }
+        ]
+      }
     }
   ],
   "metadata": {
+    "instant": false,
     "version": 1,
     "scenario": {
-      "name": "Scenario 3: Post-Booking Deal Management",
-      "description": "When a deal is marked Closed Won in CRM, sends confirmations to client and talent, logs the booking, creates a calendar event, and alerts the team."
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
     },
-    "scheduling": {
-      "type": "interval",
-      "interval": 900
-    }
+    "designer": {
+      "orphans": []
+    },
+    "zone": "us1.make.com"
   }
 }
