@@ -1,14 +1,15 @@
 import { useReveal } from './hooks/useReveal';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import SocialProof from './components/SocialProof';
 import Services from './components/Services';
-import HowItWorks from './components/HowItWorks';
+import Portfolio from './components/Portfolio';
 import About from './components/About';
-import CTA from './components/CTA';
+import Process from './components/Process';
+import Testimonials from './components/Testimonials';
+import Contact from './components/Contact';
 import Footer from './components/Footer';
 
-function App() {
+export default function App() {
   useReveal();
 
   return (
@@ -16,15 +17,14 @@ function App() {
       <Navbar />
       <main>
         <Hero />
-        <SocialProof />
         <Services />
-        <HowItWorks />
+        <Portfolio />
         <About />
-        <CTA />
+        <Process />
+        <Testimonials />
+        <Contact />
       </main>
       <Footer />
     </>
   );
 }
-
-export default App;

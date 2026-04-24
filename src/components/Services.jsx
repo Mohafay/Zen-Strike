@@ -1,80 +1,106 @@
-const services = [
+const SERVICES = [
   {
-    title: 'AI-Powered Outreach Systems',
+    title: 'Landscape Architecture',
     description:
-      'Automated prospecting pipelines that find, enrich, and contact your ideal clients—at scale, with personalization.',
-    icon: (
-      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-      </svg>
-    ),
+      'Master plans that unify built form and nature. We shape terrain, sightlines, and seasonal character into cohesive living spaces.',
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80',
+    alt:   'Lush garden landscape design',
   },
   {
-    title: 'Content Automation',
+    title: 'Custom Swimming Pools',
     description:
-      'AI systems that create, schedule, and publish thought leadership content across LinkedIn and beyond.',
-    icon: (
-      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
-      </svg>
-    ),
+      'Infinity-edge pools, naturalistic water features, and integrated spas — sculpted to complement your property\'s unique geometry.',
+    image: 'https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?auto=format&fit=crop&w=800&q=80',
+    alt:   'Luxury custom swimming pool',
   },
   {
-    title: 'Internal Knowledge & Operations',
+    title: 'Outdoor Kitchens',
     description:
-      'Searchable knowledge bases and automated workflows that eliminate bottlenecks and speed up your team.',
-    icon: (
-      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776" />
-      </svg>
-    ),
+      'Culinary environments built for year-round entertaining — premium appliances, custom stonework, and seamless indoor-outdoor flow.',
+    image: 'https://images.unsplash.com/photo-1592321675774-3de57f3ee0dc?auto=format&fit=crop&w=800&q=80',
+    alt:   'Luxury outdoor kitchen installation',
   },
   {
-    title: 'Custom Integrations',
+    title: 'Garden & Planting',
     description:
-      'Seamless connections between Make.com, APIs, CRMs, and your existing tools—fully automated and monitored.',
-    icon: (
-      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
-      </svg>
-    ),
+      'Curated planting schemes that shift beautifully with every season — blending structure, colour, and fragrance with intention.',
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=800&q=80',
+    alt:   'Curated garden planting design',
+  },
+  {
+    title: 'Atmospheric Lighting',
+    description:
+      'Architectural illumination that sculpts your landscape after dark — highlighting texture, depth, and drama with precision.',
+    image: 'https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=800&q=80',
+    alt:   'Atmospheric outdoor lighting',
+  },
+  {
+    title: 'Stonework & Terracing',
+    description:
+      'Handcrafted stone patios, retaining walls, and paved terraces that anchor your outdoor space with timeless solidity.',
+    image: 'https://images.unsplash.com/photo-1513584684374-8bab748fbf90?auto=format&fit=crop&w=800&q=80',
+    alt:   'Handcrafted stone patio terracing',
   },
 ];
 
 export default function Services() {
   return (
-    <section className="relative px-6 md:px-12 lg:px-20 py-20 md:py-28 bg-dark-800/40">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16 reveal">
-          <p className="text-accent font-medium text-sm tracking-widest uppercase mb-4">
-            What We Build
-          </p>
-          <h2 className="font-heading font-bold text-3xl md:text-4xl lg:text-5xl text-white mb-4">
-            Systems That Work While You Sleep
-          </h2>
-          <p className="text-gray-400 max-w-xl mx-auto">
-            We design and deploy AI automation stacks tailored to consulting firms.
-          </p>
+    <section id="services" className="bg-cream-100 py-24 md:py-32 px-6 md:px-12">
+      <div className="max-w-screen-xl mx-auto">
+
+        {/* Header */}
+        <div className="mb-16 md:mb-20 reveal">
+          <p className="section-eyebrow mb-4">What We Create</p>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <h2 className="section-title text-5xl md:text-6xl gold-rule">
+              Spaces That<br />
+              <em className="italic font-light">Transcend</em> the Ordinary
+            </h2>
+            <p className="max-w-sm font-sans font-light text-stone-deep/80 leading-relaxed text-sm md:text-base">
+              Every project begins with listening. We bring craft, precision, and
+              decades of horticultural and architectural knowledge to each commission.
+            </p>
+          </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service, i) => (
-            <div
+        {/* Services grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+          {SERVICES.map((service, i) => (
+            <article
               key={service.title}
-              className={`card-glass p-7 group reveal reveal-delay-${(i % 3) + 1}`}
+              className={`group reveal reveal-delay-${(i % 3) + 1}`}
             >
-              <div className="w-14 h-14 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent mb-5 group-hover:bg-accent group-hover:text-white transition-all duration-300">
-                {service.icon}
+              {/* Image */}
+              <div className="img-zoom aspect-[4/3] bg-cream-300 mb-6 overflow-hidden">
+                <img
+                  src={service.image}
+                  alt={service.alt}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
               </div>
-              <h3 className="font-heading font-semibold text-lg text-white mb-3">
-                {service.title}
-              </h3>
-              <p className="text-gray-400 text-sm leading-relaxed">
-                {service.description}
-              </p>
-            </div>
+
+              {/* Text */}
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="font-serif font-light text-2xl text-ink mb-3 group-hover:text-forest-600 transition-colors duration-300">
+                    {service.title}
+                  </h3>
+                  <p className="font-sans font-light text-sm text-stone-deep/75 leading-relaxed">
+                    {service.description}
+                  </p>
+                </div>
+                {/* Arrow */}
+                <div className="flex-shrink-0 mt-1 w-8 h-8 border border-stone-warm flex items-center justify-center text-stone-mid group-hover:border-forest-600 group-hover:text-forest-600 group-hover:bg-forest-50 transition-all duration-300">
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7m0 0H7m10 0v10" />
+                  </svg>
+                </div>
+              </div>
+            </article>
           ))}
         </div>
+
       </div>
     </section>
   );

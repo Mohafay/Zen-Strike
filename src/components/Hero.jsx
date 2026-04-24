@@ -1,58 +1,82 @@
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay">
-      {/* Background orbs */}
-      <div className="glow-orb w-[600px] h-[600px] bg-accent top-[-200px] left-[-200px]" />
-      <div className="glow-orb w-[500px] h-[500px] bg-purple-600 bottom-[-150px] right-[-150px]" />
-      <div className="glow-orb w-[300px] h-[300px] bg-blue-500 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.06]" />
+    <section
+      id="hero"
+      className="relative h-screen min-h-[680px] flex items-center justify-center overflow-hidden"
+    >
+      {/* Background image */}
+      <div className="absolute inset-0">
+        <img
+          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2400&q=90"
+          alt="Luxury outdoor living space"
+          className="w-full h-full object-cover object-center"
+          loading="eager"
+          fetchpriority="high"
+        />
+        {/* Layered dark overlay for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/35 to-ink/65" />
+        {/* Subtle vignette */}
+        <div className="absolute inset-0"
+          style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(10,10,8,0.5) 100%)' }}
+        />
+      </div>
 
-      {/* Grid pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-        }}
-      />
-
-      <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 text-center pt-24 pb-20">
-        <div className="animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-8">
-            <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-            AI Automation for Consulting Firms
-          </div>
-        </div>
-
-        <h1
-          className="font-heading font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight mb-6 animate-fade-in-up"
-        >
-          We Help Boutique Consulting Firms{' '}
-          <span className="gradient-text">Scale Without Scaling Headcount</span>
-        </h1>
-
+      {/* Content */}
+      <div className="relative z-10 max-w-screen-xl mx-auto px-6 md:px-12 text-center">
+        {/* Eyebrow */}
         <p
-          className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in-up"
-          style={{ animationDelay: '0.15s' }}
+          className="text-xs font-sans font-medium tracking-ultra uppercase text-white/50 mb-8 animate-fade-in"
+          style={{ opacity: 0, animationFillMode: 'forwards' }}
         >
-          AI-powered systems that automate your outreach, content, and
-          operations—so you can focus on what you do best: advising clients.
+          Luxury Outdoor Living
         </p>
 
-        <div className="animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-          <a href="https://calendly.com/mouhamedbachir-faye/30min" target="_blank" rel="noopener noreferrer" className="btn-primary text-lg">
-            Book a Discovery Call
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        {/* Headline */}
+        <h1
+          className="font-serif font-light text-[clamp(3rem,8vw,7.5rem)] leading-[0.92] text-white mb-8 animate-fade-in-up"
+          style={{ opacity: 0, animationDelay: '0.2s', animationFillMode: 'forwards' }}
+        >
+          The Art of<br />
+          <em className="italic font-light">Outdoor</em> Living
+        </h1>
+
+        {/* Subheadline */}
+        <p
+          className="max-w-lg mx-auto font-sans font-light text-lg text-white/65 mb-12 leading-relaxed animate-fade-in-up"
+          style={{ opacity: 0, animationDelay: '0.4s', animationFillMode: 'forwards' }}
+        >
+          Bespoke landscapes crafted with precision — designed to endure,
+          built to inspire.
+        </p>
+
+        {/* CTAs */}
+        <div
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up"
+          style={{ opacity: 0, animationDelay: '0.6s', animationFillMode: 'forwards' }}
+        >
+          <a href="#contact" className="btn-primary">
+            Request an Estimate
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </a>
+          <a href="#portfolio" className="btn-outline-light">
+            View Our Work
+          </a>
         </div>
+      </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-500 animate-fade-in" style={{ animationDelay: '1s' }}>
-          <span className="text-xs tracking-widest uppercase">Scroll</span>
-          <div className="w-5 h-8 rounded-full border border-gray-600 flex justify-center pt-1.5">
-            <div className="w-1 h-2 rounded-full bg-gray-500 animate-bounce" />
-          </div>
+      {/* Scroll indicator */}
+      <div
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 animate-fade-in"
+        style={{ opacity: 0, animationDelay: '1.4s', animationFillMode: 'forwards' }}
+        aria-hidden="true"
+      >
+        <span className="text-[10px] font-sans font-medium tracking-ultra uppercase text-white/35">
+          Discover
+        </span>
+        <div className="w-px h-12 bg-white/20 relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-5 bg-white/50 animate-bounce" />
         </div>
       </div>
     </section>
