@@ -1,0 +1,82 @@
+[
+  {
+    "surgeon_id": "sg_1",
+    "name": "Dr. Elena Ramirez",
+    "practice_name": "Ramirez Plastic Surgery",
+    "specialty": "plastic surgery",
+    "office_email": "office@ramirezplasticsurgery.example",
+    "office_manager": "Carla Nunez",
+    "relationship_since": "2023-09-01",
+    "last_report_sent": "2026-06-16"
+  },
+  {
+    "surgeon_id": "sg_2",
+    "name": "Dr. Marcus Chen",
+    "practice_name": "Chen Aesthetic Surgery Group",
+    "specialty": "plastic surgery",
+    "office_email": "referrals@chenaesthetic.example",
+    "office_manager": "Priya Mehta",
+    "relationship_since": "2022-11-15",
+    "last_report_sent": "2026-06-15"
+  },
+  {
+    "surgeon_id": "sg_3",
+    "name": "Dr. Grace Whitfield",
+    "practice_name": "Whitfield Reconstructive Surgery",
+    "specialty": "reconstructive",
+    "office_email": "info@whitfieldreconstructive.example",
+    "office_manager": "Dana Osei",
+    "relationship_since": "2023-02-20",
+    "last_report_sent": "2026-04-20"
+  },
+  {
+    "surgeon_id": "sg_4",
+    "name": "Dr. Samuel Okonkwo",
+    "practice_name": "Okonkwo Plastic & Reconstructive",
+    "specialty": "plastic surgery",
+    "office_email": "scheduling@okonkwoprs.example",
+    "office_manager": "Lena Brandt",
+    "relationship_since": "2024-01-10",
+    "last_report_sent": "2026-07-07"
+  },
+  {
+    "surgeon_id": "sg_5",
+    "name": "Dr. Ingrid Bergstrom",
+    "practice_name": "Bergstrom Cosmetic Surgery",
+    "specialty": "plastic surgery",
+    "office_email": "office@bergstromcosmetic.example",
+    "office_manager": "Renee Falk",
+    "relationship_since": "2023-05-05",
+    "last_report_sent": "2026-02-27"
+  },
+  {
+    "surgeon_id": "sg_6",
+    "name": "Dr. Anil Patel",
+    "practice_name": "Patel Orthopedic & Sports Medicine",
+    "specialty": "orthopedic",
+    "office_email": "referrals@patelortho.example",
+    "office_manager": "Sofia Reyes",
+    "relationship_since": "2024-06-01",
+    "last_report_sent": "2026-07-05"
+  },
+  {
+    "surgeon_id": "sg_7",
+    "name": "Dr. Jasmine Alvarez",
+    "practice_name": "Alvarez OB-GYN & Wellness",
+    "specialty": "ob-gyn",
+    "office_email": "office@alvarezobgyn.example",
+    "office_manager": "Marisol Vega",
+    "relationship_since": "2024-03-18",
+    "last_report_sent": "2026-06-22"
+  },
+  {
+    "surgeon_id": "sg_8",
+    "name": "Dr. Thomas Nakamura",
+    "practice_name": "Nakamura Plastic Surgery",
+    "specialty": "plastic surgery",
+    "office_email": "info@nakamuraplasticsurgery.example",
+    "office_manager": "Owen Field",
+    "relationship_since": "2025-08-01",
+    "last_report_sent": null
+  }
+]
