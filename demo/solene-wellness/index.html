@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solène Women's Wellness — Book Your Appointment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-1:#2a0e16;
+    --bg-2:#3d1420;
+    --blush:#e8b4bc;
+    --cream:#f5ede8;
+    --line: rgba(245,237,232,0.14);
+    --card: rgba(245,237,232,0.045);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(120% 90% at 15% -10%, rgba(232,180,188,0.10), transparent 55%),
+      linear-gradient(165deg, var(--bg-1) 0%, var(--bg-2) 60%, #200a10 100%);
+    color:var(--cream);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:'Cormorant Garamond', 'Playfair Display', serif;
+    font-weight:500;
+    margin:0;
+  }
+  em, i.accent{
+    font-style:italic;
+    color:var(--blush);
+  }
+
+  a{ color:inherit; }
+
+  .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:0.18em;
+    font-size:0.72rem;
+    font-weight:600;
+    color:var(--blush);
+  }
+
+  .label{
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    font-size:0.7rem;
+    font-weight:600;
+    color:rgba(245,237,232,0.7);
+    display:block;
+    margin-bottom:0.55rem;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky;
+    top:0;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:1.1rem clamp(1rem, 4vw, 3rem);
+    background:rgba(32,10,16,0.55);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:0.4rem;
+    padding:0.6rem 1.15rem;
+    border-radius:999px;
+    border:1px solid var(--line);
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    font-size:0.7rem;
+    font-weight:600;
+    white-space:nowrap;
+    text-decoration:none;
+    color:var(--cream);
+    background:transparent;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+    transition:all 0.2s ease;
+  }
+  .pill.solid{
+    background:var(--blush);
+    border-color:var(--blush);
+    color:#2a0e16;
+  }
+  .pill.solid:hover{ background:#f0c5cc; }
+  .pill:not(.solid):hover{ border-color:var(--blush); color:var(--blush); }
+
+  .wordmark{
+    font-family:'Cormorant Garamond', serif;
+    font-size:1.4rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    font-weight:500;
+    text-align:center;
+  }
+  .wordmark span{ color:var(--blush); font-style:italic; }
+
+  .topbar .pill.hide-mobile{ display:inline-flex; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    max-width:900px;
+    margin:0 auto;
+    padding:clamp(4rem, 10vw, 7rem) 1.5rem clamp(3rem, 8vw, 5rem);
+    text-align:center;
+  }
+  .hero .eyebrow{ display:block; margin-bottom:1.25rem; }
+  .hero h1{
+    font-size:clamp(2.4rem, 6vw, 4.2rem);
+    line-height:1.08;
+    letter-spacing:0.005em;
+  }
+  .hero p.subhead{
+    max-width:620px;
+    margin:1.75rem auto 0;
+    font-size:clamp(1rem, 2vw, 1.12rem);
+    line-height:1.65;
+    color:rgba(245,237,232,0.8);
+    font-weight:400;
+  }
+  .hero .cta-row{
+    margin-top:2.5rem;
+    display:flex;
+    justify-content:center;
+  }
+  .cta-primary{
+    display:inline-flex;
+    align-items:center;
+    gap:0.5rem;
+    padding:0.95rem 2rem;
+    border-radius:999px;
+    background:var(--blush);
+    color:#2a0e16;
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.85rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    border:none;
+    cursor:pointer;
+    transition:transform 0.2s ease, background 0.2s ease;
+  }
+  .cta-primary:hover{ background:#f0c5cc; transform:translateY(-1px); }
+
+  .hero-divider{
+    width:1px;
+    height:64px;
+    margin:3.5rem auto 0;
+    background:linear-gradient(var(--blush), transparent);
+    opacity:0.5;
+  }
+
+  /* ---------- Form section ---------- */
+  .form-section{
+    max-width:640px;
+    margin:0 auto;
+    padding:0 1.25rem clamp(5rem, 10vw, 7rem);
+  }
+  .form-section .heading{
+    text-align:center;
+    margin-bottom:2.5rem;
+  }
+  .form-section h2{
+    font-size:clamp(1.9rem, 4vw, 2.6rem);
+  }
+  .form-section .heading p{
+    margin-top:0.75rem;
+    color:rgba(245,237,232,0.72);
+    font-size:0.98rem;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:clamp(1.5rem, 4vw, 2.75rem);
+    backdrop-filter:blur(6px);
+    box-shadow:0 30px 60px -25px rgba(0,0,0,0.55);
+  }
+
+  .step-indicator{
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+    margin-bottom:1.75rem;
+  }
+  .step-indicator .dot{
+    width:6px; height:6px; border-radius:50%;
+    background:rgba(245,237,232,0.25);
+  }
+  .step-indicator .dot.active{ background:var(--blush); width:18px; border-radius:4px; transition:all 0.25s ease; }
+  .step-indicator span{
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    font-size:0.68rem;
+    color:rgba(245,237,232,0.55);
+    font-weight:600;
+  }
+
+  .step h3{
+    font-size:1.5rem;
+    margin-bottom:1.1rem;
+    font-weight:500;
+  }
+
+  .field-group{ margin-bottom:1.6rem; }
+
+  .pill-options{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.6rem;
+  }
+  .pill-option{
+    padding:0.65rem 1.05rem;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:rgba(245,237,232,0.03);
+    color:var(--cream);
+    font-family:'Inter', sans-serif;
+    font-size:0.83rem;
+    cursor:pointer;
+    transition:all 0.18s ease;
+  }
+  .pill-option:hover{ border-color:rgba(232,180,188,0.6); }
+  .pill-option.selected{
+    background:var(--blush);
+    border-color:var(--blush);
+    color:#2a0e16;
+    font-weight:600;
+  }
+
+  input[type=text], input[type=tel], input[type=email], input[type=date], textarea{
+    width:100%;
+    padding:0.85rem 1rem;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:rgba(245,237,232,0.04);
+    color:var(--cream);
+    font-family:'Inter', sans-serif;
+    font-size:0.95rem;
+    outline:none;
+    transition:border-color 0.18s ease;
+  }
+  input::placeholder, textarea::placeholder{ color:rgba(245,237,232,0.35); }
+  input:focus, textarea:focus{ border-color:var(--blush); }
+  textarea{ min-height:90px; resize:vertical; font-family:'Inter', sans-serif; }
+
+  /* date input calendar icon visibility on dark bg */
+  input[type=date]::-webkit-calendar-picker-indicator{ filter:invert(0.85); cursor:pointer; }
+
+  .row-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1rem;
+  }
+  @media (max-width:520px){
+    .row-2{ grid-template-columns:1fr; }
+  }
+
+  .error-text{
+    color:var(--blush);
+    font-size:0.78rem;
+    margin-top:0.5rem;
+    display:none;
+  }
+  .error-text.show{ display:block; }
+
+  .consent-row{
+    display:flex;
+    align-items:flex-start;
+    gap:0.7rem;
+    margin-top:0.25rem;
+  }
+  .consent-row input[type=checkbox]{
+    margin-top:0.2rem;
+    width:16px; height:16px;
+    accent-color:var(--blush);
+    flex-shrink:0;
+  }
+  .consent-row label{
+    font-size:0.8rem;
+    line-height:1.5;
+    color:rgba(245,237,232,0.75);
+  }
+
+  .actions-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:1.75rem;
+    gap:1rem;
+  }
+  .btn-primary{
+    padding:0.9rem 1.9rem;
+    border-radius:999px;
+    background:var(--blush);
+    border:none;
+    color:#2a0e16;
+    font-weight:600;
+    font-size:0.82rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:all 0.18s ease;
+  }
+  .btn-primary:hover{ background:#f0c5cc; }
+  .btn-primary:disabled{ opacity:0.6; cursor:not-allowed; }
+
+  .btn-link{
+    background:none;
+    border:none;
+    color:rgba(245,237,232,0.6);
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    font-size:0.72rem;
+    font-weight:600;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+  }
+  .btn-link:hover{ color:var(--blush); }
+
+  .submit-note{
+    text-align:center;
+    font-size:0.72rem;
+    color:rgba(245,237,232,0.45);
+    margin-top:1.1rem;
+  }
+
+  .form-status{
+    text-align:center;
+    padding:0.9rem 1rem;
+    border-radius:10px;
+    font-size:0.85rem;
+    margin-top:1.25rem;
+    display:none;
+  }
+  .form-status.show{ display:block; }
+  .form-status.error{
+    background:rgba(232,180,188,0.1);
+    border:1px solid rgba(232,180,188,0.35);
+    color:var(--blush);
+  }
+
+  .thank-you{
+    text-align:center;
+    padding:2.5rem 1rem;
+  }
+  .thank-you .mark{
+    font-size:2.4rem;
+    color:var(--blush);
+    margin-bottom:1rem;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+  }
+  .thank-you p{
+    font-size:1.1rem;
+    line-height:1.6;
+    color:rgba(245,237,232,0.85);
+  }
+
+  .hidden{ display:none !important; }
+
+  /* ---------- Footer ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:2.5rem 1.5rem 3rem;
+    text-align:center;
+  }
+  footer p{
+    font-size:0.75rem;
+    line-height:1.7;
+    color:rgba(245,237,232,0.45);
+    max-width:560px;
+    margin:0 auto 0.5rem;
+  }
+  footer .phone{
+    color:rgba(245,237,232,0.65);
+    font-weight:600;
+    letter-spacing:0.03em;
+  }
+
+  @media (max-width:640px){
+    .topbar .pill.hide-mobile{ display:none; }
+    .wordmark{ font-size:1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <button class="pill" type="button" aria-label="Menu">Menu</button>
+    <div class="wordmark">Solène <span>Women's Wellness</span></div>
+    <a class="pill solid hide-mobile" href="#book">Book Your Appointment →</a>
+  </header>
+
+  <section class="hero">
+    <span class="eyebrow">Women's Wellness</span>
+    <h1>Care that meets you <em>fully</em>, at every stage.</h1>
+    <p class="subhead">
+      Physician-led care for menopause, hormone therapy, sexual health, pelvic health,
+      and body contouring — delivered with the time, privacy, and attention you deserve.
+    </p>
+    <div class="cta-row">
+      <a class="cta-primary" href="#book">Book a consult →</a>
+    </div>
+    <div class="hero-divider"></div>
+  </section>
+
+  <section class="form-section" id="book">
+    <div class="heading">
+      <h2>Book Your <em>Appointment</em></h2>
+      <p>A 60–90 minute new-patient consult.</p>
+    </div>
+
+    <div class="card">
+
+      <!-- Step indicator -->
+      <div class="step-indicator" id="stepIndicator">
+        <div class="dot active" data-step="1"></div>
+        <div class="dot" data-step="2"></div>
+        <span id="stepLabel">Step 1 of 2</span>
+      </div>
+
+      <form id="leadForm" novalidate>
+
+        <!-- Step 1 -->
+        <div class="step" id="step1">
+          <h3>What brings you here?</h3>
+          <div class="field-group">
+            <div class="pill-options" id="interestOptions" data-group="interest">
+              <button type="button" class="pill-option" data-value="Hormones or menopause">Hormones or menopause</button>
+              <button type="button" class="pill-option" data-value="Sexual health">Sexual health</button>
+              <button type="button" class="pill-option" data-value="Pelvic or urinary symptoms">Pelvic or urinary symptoms</button>
+              <button type="button" class="pill-option" data-value="Vaginal rejuvenation">Vaginal rejuvenation</button>
+              <button type="button" class="pill-option" data-value="Aesthetic or regenerative care">Aesthetic or regenerative care</button>
+              <button type="button" class="pill-option" data-value="Body contouring">Body contouring</button>
+              <button type="button" class="pill-option" data-value="Supplements">Supplements</button>
+              <button type="button" class="pill-option" data-value="I am not sure yet">I am not sure yet</button>
+            </div>
+            <span class="error-text" id="err-interest">Please select what brings you here.</span>
+          </div>
+
+          <div class="field-group">
+            <label class="label">What kind of visit feels right?</label>
+            <div class="pill-options" id="visitOptions" data-group="visit">
+              <button type="button" class="pill-option selected" data-value="Either">Either</button>
+              <button type="button" class="pill-option" data-value="In-person">In-person</button>
+              <button type="button" class="pill-option" data-value="Virtual consult">Virtual consult</button>
+            </div>
+          </div>
+
+          <div class="actions-row" style="justify-content:flex-end;">
+            <button type="button" class="btn-primary" id="continueBtn">Continue</button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step hidden" id="step2">
+          <h3>How should our team reach you?</h3>
+
+          <div class="field-group">
+            <label class="label" for="fullName">Name</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Full name" autocomplete="name">
+            <span class="error-text" id="err-name">Please enter your full name.</span>
+          </div>
+
+          <div class="row-2">
+            <div class="field-group">
+              <label class="label" for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" autocomplete="tel">
+              <span class="error-text" id="err-phone">Please enter a valid phone number.</span>
+            </div>
+            <div class="field-group">
+              <label class="label" for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email">
+              <span class="error-text" id="err-email">Please enter a valid email.</span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="label">How should we reach you?</label>
+            <div class="pill-options" id="reachOptions" data-group="reach">
+              <button type="button" class="pill-option" data-value="Call me">Call me</button>
+              <button type="button" class="pill-option" data-value="Email me">Email me</button>
+              <button type="button" class="pill-option selected" data-value="Either">Either</button>
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="field-group">
+              <label class="label" for="prefDate">Preferred date</label>
+              <input type="date" id="prefDate" name="prefDate">
+            </div>
+            <div class="field-group">
+              <label class="label">Preferred time</label>
+              <div class="pill-options" id="timeOptions" data-group="time">
+                <button type="button" class="pill-option selected" data-value="First available">First available</button>
+                <button type="button" class="pill-option" data-value="Morning">Morning</button>
+                <button type="button" class="pill-option" data-value="Midday">Midday</button>
+                <button type="button" class="pill-option" data-value="Afternoon">Afternoon</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="label" for="notes">Anything else we should know?</label>
+            <textarea id="notes" name="notes" placeholder="Optional notes for our care team"></textarea>
+          </div>
+
+          <div class="field-group">
+            <div class="consent-row">
+              <input type="checkbox" id="consent" name="consent">
+              <label for="consent">I understand this form is for appointment requests only and is not a secure medical record.</label>
+            </div>
+            <span class="error-text" id="err-consent">Please confirm before submitting.</span>
+          </div>
+
+          <div class="actions-row">
+            <button type="button" class="btn-link" id="backBtn">← Back</button>
+            <button type="submit" class="btn-primary" id="submitBtn">Request appointment</button>
+          </div>
+
+          <p class="submit-note">We typically respond within one business hour.</p>
+          <div class="form-status error" id="formStatus"></div>
+        </div>
+
+      </form>
+
+      <!-- Thank you state -->
+      <div class="thank-you hidden" id="thankYou">
+        <div class="mark">Thank you</div>
+        <p>Our team will reach out shortly.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      Solène Women's Wellness is a fictional demonstration practice. This form is for
+      appointment requests only and does not constitute a secure medical record or
+      establish a physician–patient relationship.
+    </p>
+    <p class="phone">(415) 555-0139</p>
+  </footer>
+
+<script>
+  // ------------------------------------------------------------------
+  // PASTE YOUR MAKE.COM (INTEGROMAT) WEBHOOK URL BELOW
+  const WEBHOOK_URL = "PASTE_MAKE_WEBHOOK_URL";
+  // ------------------------------------------------------------------
+
+  const state = {
+    interest: null,
+    visit: "Either",
+    reach: "Either",
+    time: "First available"
+  };
+
+  function wirePillGroup(containerId, stateKey) {
+    const container = document.getElementById(containerId);
+    container.querySelectorAll(".pill-option").forEach(btn => {
+      btn.addEventListener("click", () => {
+        container.querySelectorAll(".pill-option").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        state[stateKey] = btn.dataset.value;
+      });
+    });
+  }
+
+  wirePillGroup("interestOptions", "interest");
+  wirePillGroup("visitOptions", "visit");
+  wirePillGroup("reachOptions", "reach");
+  wirePillGroup("timeOptions", "time");
+
+  const step1 = document.getElementById("step1");
+  const step2 = document.getElementById("step2");
+  const stepLabel = document.getElementById("stepLabel");
+  const dots = document.querySelectorAll("#stepIndicator .dot");
+
+  function goToStep(n) {
+    step1.classList.toggle("hidden", n !== 1);
+    step2.classList.toggle("hidden", n !== 2);
+    stepLabel.textContent = "Step " + n + " of 2";
+    dots.forEach(d => d.classList.toggle("active", Number(d.dataset.step) === n));
+  }
+
+  document.getElementById("continueBtn").addEventListener("click", () => {
+    const err = document.getElementById("err-interest");
+    if (!state.interest) {
+      err.classList.add("show");
+      return;
+    }
+    err.classList.remove("show");
+    goToStep(2);
+  });
+
+  document.getElementById("backBtn").addEventListener("click", () => {
+    goToStep(1);
+  });
+
+  function normalizePhone(raw) {
+    let p = raw.replace(/[\s()\-]/g, "");
+    if (p && !p.startsWith("+")) p = "+1" + p;
+    return p;
+  }
+
+  function clearErrors() {
+    document.querySelectorAll("#step2 .error-text").forEach(e => e.classList.remove("show"));
+    const status = document.getElementById("formStatus");
+    status.classList.remove("show");
+    status.textContent = "";
+  }
+
+  const form = document.getElementById("leadForm");
+  const submitBtn = document.getElementById("submitBtn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    clearErrors();
+
+    const nameVal = document.getElementById("fullName").value.trim();
+    const phoneRaw = document.getElementById("phone").value.trim();
+    const emailVal = document.getElementById("email").value.trim();
+    const notesVal = document.getElementById("notes").value.trim();
+    const dateVal = document.getElementById("prefDate").value;
+    const consentChecked = document.getElementById("consent").checked;
+
+    const normalizedPhone = normalizePhone(phoneRaw);
+
+    let hasError = false;
+
+    const nameParts = nameVal.split(/\s+/).filter(Boolean);
+    if (nameParts.length < 2) {
+      document.getElementById("err-name").classList.add("show");
+      hasError = true;
+    }
+
+    const digitCount = (normalizedPhone.match(/\d/g) || []).length;
+    if (digitCount < 10) {
+      document.getElementById("err-phone").classList.add("show");
+      hasError = true;
+    }
+
+    if (emailVal && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      document.getElementById("err-email").classList.add("show");
+      hasError = true;
+    }
+
+    if (!consentChecked) {
+      document.getElementById("err-consent").classList.add("show");
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    const first_name = nameParts[0];
+    const last_name = nameParts.slice(1).join(" ");
+
+    const payload = {
+      first_name,
+      last_name,
+      phone: normalizedPhone,
+      email: emailVal,
+      interest: state.interest,
+      source: "website_form",
+      visit_type: state.visit,
+      reach_preference: state.reach,
+      preferred_date: dateVal,
+      preferred_time: state.time,
+      notes: notesVal
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending…";
+
+    try {
+      const res = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) throw new Error("Request failed");
+
+      form.classList.add("hidden");
+      document.getElementById("stepIndicator").classList.add("hidden");
+      document.getElementById("thankYou").classList.remove("hidden");
+    } catch (err) {
+      const status = document.getElementById("formStatus");
+      status.textContent = "Something went wrong. Please try again.";
+      status.classList.add("show");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Request appointment";
+    }
+  });
+</script>
+
+</body>
+</html>
