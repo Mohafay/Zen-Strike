@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { isWeekend, monthGrid, monthLabel, parseDateStr, todayStr } from '../lib/date';
+import { isOptionalDay, monthGrid, monthLabel, parseDateStr, todayStr } from '../lib/date';
 import { isGroupADone } from '../lib/dailyTemplate';
 import type { DayRecord } from '../types';
 
@@ -74,7 +74,7 @@ function DayCell({
   isToday: boolean;
 }) {
   if (!date) return <div />;
-  const weekend = isWeekend(date);
+  const optional = isOptionalDay(date);
   const dayNum = Number(date.slice(-2));
 
   let bg = 'bg-surface2';
@@ -85,7 +85,7 @@ function DayCell({
   return (
     <div
       className={`flex aspect-square items-center justify-center rounded-md text-[11px] ${bg} ${
-        weekend ? 'opacity-50' : ''
+        optional ? 'opacity-50' : ''
       } ${isToday ? 'ring-1 ring-white/70' : ''}`}
       title={date}
     >

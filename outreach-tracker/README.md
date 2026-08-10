@@ -69,33 +69,64 @@ floor rather than something to fiddle with.
 
 - **Outreach floor** (counters, tap +/− toward a target, auto-marks done at
   target): LinkedIn requests (20), personalized emails (34), follow-ups
-  (20), Loom audits (5).
+  (20), Upwork applications (3 — no target was given for this one, so it's
+  a placeholder; edit it in `dailyTemplate.ts`).
 - **Daily wins** (checkboxes): booked 1 call, posted 1 piece of content.
-- **End-of-day log** (plain numbers, not checkboxes): total touches,
-  replies, calls booked, deals closed.
+- **End-of-day log** (plain numbers, not checkboxes): total touches. This
+  section is deliberately just the one input-side number — no
+  replies/calls-booked/deals-closed output metrics are tracked.
 
 **Long-press** any outreach-floor row to force it done/undone regardless of
 the counter — useful if you did the work somewhere the counter doesn't
 capture, or want to correct a mis-tap.
 
 A new calendar day (local time) automatically starts a fresh checklist;
-everything before it stays in History.
+everything before it stays in History. **Saturday is a normal mandatory
+day; only Sunday is optional** (shown, trackable, but doesn't count against
+you).
 
 ## Streak & progress ring
 
 The ring shows "N of 6 done" across the outreach floor (4) + daily wins (2).
-The streak counts **consecutive weekdays** where the full outreach floor was
-hit — weekends don't count and don't break it (they're just skipped), and
-today gets a pass while still in progress rather than counting against you
-mid-day. See `src/lib/streak.ts` for the exact logic.
+The streak counts **consecutive mandatory days** (Mon–Sat) where the full
+outreach floor was hit — Sundays don't count and don't break it (they're
+just skipped), and today gets a pass while still in progress rather than
+counting against you mid-day. See `src/lib/streak.ts` for the exact logic.
+
+## Timer / time blocking
+
+The Timer tab lets you block out a chunk of time for one activity — e.g.
+"2h for cold emails" — and count it down. Pick (or type) a label, pick a
+duration (25m/50m/1h/2h presets or type custom minutes), hit Start. You can
+pause/resume, and "Stop & save" logs the actual elapsed time against
+today, visible in the "Today's blocks" list below and rolled up into the
+weekly "Time logged" stat in History. "Discard without saving" throws it
+away instead.
+
+The countdown is computed from wall-clock timestamps (not a running JS
+loop), so it keeps correct time across reloads or the tab being
+backgrounded — same reasoning as the reminder check below. If notifications
+are enabled, hitting the planned duration fires one "time block done"
+notification (same reliability caveats as the end-of-day reminder).
 
 ## History
 
 The History tab has a calendar heatmap (green = outreach floor hit that
 day, amber = you logged something but didn't hit the floor, dark = no
-data), a weekly summary card (totals + reply rate = replies ÷ touches for
-the current Mon–today window), and a scrollable list of the last 14 days'
-logged numbers.
+data, Sundays dimmed since they're optional), a weekly summary card
+(touches, time logged, and floor-hit days for the current Mon–today
+window — inputs only, no output/result metrics), and a scrollable list of
+the last 14 days' numbers.
+
+## Background image
+
+The app's background is a fixed, full-viewport photo behind a dark scrim,
+with every card rendered as frosted glass (translucent + blurred) so the
+photo reads through. Drop your image at `public/bg.jpg` (any landscape
+photo works; something in the 1600–2400px-wide range is plenty) — it's
+referenced by that fixed path in `src/App.tsx`. Until you add it, the app
+just shows the dark scrim on its own, which is why it currently looks
+identical to before.
 
 ## Reminders
 

@@ -24,7 +24,7 @@ export function TodayView({ date, streak, actions }: Props) {
           <div className="mt-1.5 flex items-center gap-1.5 text-sm text-muted">
             <FlameIcon lit={streak > 0} />
             <span>
-              {streak} weekday{streak === 1 ? '' : 's'} streak
+              {streak} day{streak === 1 ? '' : 's'} streak
             </span>
           </div>
         </div>

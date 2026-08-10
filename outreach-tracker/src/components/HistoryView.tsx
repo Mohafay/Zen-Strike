@@ -1,5 +1,6 @@
 import { addDays, friendlyDate, todayStr } from '../lib/date';
 import { isGroupADone } from '../lib/dailyTemplate';
+import { formatDuration } from '../lib/timeFormat';
 import type { DayRecord } from '../types';
 import { CalendarHeatmap } from './CalendarHeatmap';
 import { WeeklySummary } from './WeeklySummary';
@@ -31,6 +32,7 @@ export function HistoryView({ days }: Props) {
             );
           }
           const hit = isGroupADone(record);
+          const timeSeconds = record.timeBlocks.reduce((s, b) => s + b.actualSeconds, 0);
           return (
             <div
               key={date}
@@ -44,9 +46,7 @@ export function HistoryView({ days }: Props) {
               </div>
               <div className="mt-1.5 flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-muted">
                 <span>{record.log.totalTouches} touches</span>
-                <span>{record.log.replies} replies</span>
-                <span>{record.log.callsBooked} calls booked</span>
-                <span>{record.log.dealsClosed} deals closed</span>
+                {timeSeconds > 0 && <span>{formatDuration(timeSeconds)} logged</span>}
               </div>
             </div>
           );

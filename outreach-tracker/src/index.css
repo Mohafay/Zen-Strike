@@ -13,6 +13,14 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Frosted-glass effect for every card/surface so the background photo reads
+   through them instead of being hidden behind solid panels. */
+.bg-surface,
+.bg-surface2 {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
 input[type='time']::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }

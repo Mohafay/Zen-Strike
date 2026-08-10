@@ -1,28 +1,25 @@
 import { daysInRange, todayStr, weekStart } from '../lib/date';
 import { isGroupADone } from '../lib/dailyTemplate';
+import { formatDuration } from '../lib/timeFormat';
 import type { DayRecord } from '../types';
 
 interface Props {
   days: Map<string, DayRecord>;
 }
 
+// Weekly summary is deliberately input-only (touches, floor-hit days, time
+// invested) — no outcome/result metrics like reply rate.
 export function WeeklySummary({ days }: Props) {
   const today = todayStr();
   const start = weekStart(today);
   const weekDates = daysInRange(start, today);
   const weekRecords = weekDates.map((d) => days.get(d)).filter((r): r is DayRecord => !!r);
 
-  const totals = weekRecords.reduce(
-    (acc, r) => ({
-      touches: acc.touches + r.log.totalTouches,
-      replies: acc.replies + r.log.replies,
-      callsBooked: acc.callsBooked + r.log.callsBooked,
-      dealsClosed: acc.dealsClosed + r.log.dealsClosed
-    }),
-    { touches: 0, replies: 0, callsBooked: 0, dealsClosed: 0 }
+  const touches = weekRecords.reduce((sum, r) => sum + r.log.totalTouches, 0);
+  const timeSeconds = weekRecords.reduce(
+    (sum, r) => sum + r.timeBlocks.reduce((s, b) => s + b.actualSeconds, 0),
+    0
   );
-
-  const replyRate = totals.touches > 0 ? (totals.replies / totals.touches) * 100 : 0;
   const floorHitDays = weekRecords.filter(isGroupADone).length;
 
   return (
@@ -32,12 +29,9 @@ export function WeeklySummary({ days }: Props) {
         <span className="text-[11px] text-muted">since Mon {start.slice(5)}</span>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <Stat label="Touches" value={totals.touches} />
-        <Stat label="Replies" value={totals.replies} />
-        <Stat label="Reply rate" value={`${replyRate.toFixed(1)}%`} />
-        <Stat label="Calls booked" value={totals.callsBooked} />
-        <Stat label="Deals closed" value={totals.dealsClosed} />
+      <div className="grid grid-cols-3 gap-3">
+        <Stat label="Touches" value={touches} />
+        <Stat label="Time logged" value={formatDuration(timeSeconds)} />
         <Stat label="Floor hit days" value={`${floorHitDays}/${weekDates.length}`} />
       </div>
     </div>

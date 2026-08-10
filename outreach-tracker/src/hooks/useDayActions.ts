@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { blankDayRecord } from '../lib/dailyTemplate';
-import type { BooleanKey, CounterKey, DayRecord, LogKey } from '../types';
+import type { BooleanKey, CounterKey, DayRecord, LogKey, TimeBlockEntry } from '../types';
 
 export function useDayActions(
   date: string,
@@ -26,7 +26,9 @@ export function useDayActions(
       setLog: (key: LogKey, value: number) =>
         update((r) => ({ ...r, log: { ...r.log, [key]: Math.max(0, value) } })),
       markReminderFired: () =>
-        update((r) => ({ ...r, reminderFiredAt: new Date().toISOString() }))
+        update((r) => ({ ...r, reminderFiredAt: new Date().toISOString() })),
+      addTimeBlock: (entry: TimeBlockEntry) =>
+        update((r) => ({ ...r, timeBlocks: [...r.timeBlocks, entry] }))
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [record, upsert]);

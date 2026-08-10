@@ -5,9 +5,12 @@ export default {
     extend: {
       colors: {
         bg: '#0b0f14',
-        surface: '#12181f',
-        surface2: '#1a222b',
-        border: '#232d38',
+        // Semi-transparent so the background photo shows through cards
+        // (paired with a backdrop-blur rule in index.css) instead of
+        // hiding it behind solid panels.
+        surface: 'rgba(18, 24, 31, 0.72)',
+        surface2: 'rgba(26, 34, 43, 0.68)',
+        border: 'rgba(35, 45, 56, 0.55)',
         accent: '#22c55e',
         accent2: '#34d399',
         warn: '#f59e0b',

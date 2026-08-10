@@ -5,7 +5,8 @@ export const COUNTER_DEFS: CounterDef[] = [
   { key: 'linkedin', label: 'LinkedIn connection requests', target: 20 },
   { key: 'emails', label: 'Personalized emails sent', target: 34 },
   { key: 'followups', label: 'Follow-ups sent', target: 20 },
-  { key: 'loomAudits', label: 'Loom audits on top prospects', target: 5 }
+  // No target was given for this one — 3/day is a placeholder, edit freely.
+  { key: 'upworkApplications', label: 'Upwork applications', target: 3 }
 ];
 
 export const BOOLEAN_DEFS: BooleanDef[] = [
@@ -13,12 +14,7 @@ export const BOOLEAN_DEFS: BooleanDef[] = [
   { key: 'postedContent', label: 'Posted 1 piece of content' }
 ];
 
-export const LOG_DEFS: LogDef[] = [
-  { key: 'totalTouches', label: 'Total touches' },
-  { key: 'replies', label: 'Replies' },
-  { key: 'callsBooked', label: 'Calls booked' },
-  { key: 'dealsClosed', label: 'Deals closed' }
-];
+export const LOG_DEFS: LogDef[] = [{ key: 'totalTouches', label: 'Total touches' }];
 
 export const DEFAULT_SETTINGS: Settings = {
   reminderTime: '18:00',
@@ -29,10 +25,11 @@ export const DEFAULT_SETTINGS: Settings = {
 export function blankDayRecord(date: string): DayRecord {
   return {
     date,
-    counts: { linkedin: 0, emails: 0, followups: 0, loomAudits: 0 },
-    forced: { linkedin: false, emails: false, followups: false, loomAudits: false },
+    counts: { linkedin: 0, emails: 0, followups: 0, upworkApplications: 0 },
+    forced: { linkedin: false, emails: false, followups: false, upworkApplications: false },
     booleans: { bookedCall: false, postedContent: false },
-    log: { totalTouches: 0, replies: 0, callsBooked: 0, dealsClosed: 0 },
+    log: { totalTouches: 0 },
+    timeBlocks: [],
     reminderFiredAt: null,
     updatedAt: new Date().toISOString()
   };

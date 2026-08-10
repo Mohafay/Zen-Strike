@@ -23,9 +23,9 @@ export function addDays(s: string, delta: number): string {
   return toDateStr(d);
 }
 
-export function isWeekend(s: string): boolean {
-  const dow = parseDateStr(s).getDay();
-  return dow === 0 || dow === 6;
+// Only Sunday is optional — Saturday is a normal mandatory day.
+export function isOptionalDay(s: string): boolean {
+  return parseDateStr(s).getDay() === 0;
 }
 
 export function weekdayLabel(s: string): string {

@@ -1,13 +1,14 @@
 import type { DayRecord } from '../types';
-import { addDays, isWeekend } from './date';
+import { addDays, isOptionalDay } from './date';
 import { isGroupADone } from './dailyTemplate';
 
 /**
- * Consecutive weekdays (Mon-Fri) with Group A fully hit, counting back from
- * today. Weekends are skipped entirely (never break, never count). Today is
- * given a pass while still in progress: it neither breaks nor extends the
- * streak until it either gets completed or the day ends without completion
- * (at which point tomorrow's calculation will correctly stop at yesterday).
+ * Consecutive mandatory days (Mon-Sat; Sunday is optional) with Group A
+ * fully hit, counting back from today. Sundays are skipped entirely (never
+ * break, never count). Today is given a pass while still in progress: it
+ * neither breaks nor extends the streak until it either gets completed or
+ * the day ends without completion (at which point tomorrow's calculation
+ * will correctly stop at yesterday).
  */
 export function computeStreak(byDate: Map<string, DayRecord>, today: string): number {
   let streak = 0;
@@ -16,7 +17,7 @@ export function computeStreak(byDate: Map<string, DayRecord>, today: string): nu
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    if (isWeekend(cursor)) {
+    if (isOptionalDay(cursor)) {
       cursor = addDays(cursor, -1);
       continue;
     }

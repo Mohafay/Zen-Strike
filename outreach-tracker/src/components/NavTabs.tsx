@@ -1,4 +1,4 @@
-export type Tab = 'today' | 'history' | 'settings';
+export type Tab = 'today' | 'timer' | 'history' | 'settings';
 
 interface Props {
   active: Tab;
@@ -7,6 +7,7 @@ interface Props {
 
 const TABS: { key: Tab; label: string; icon: (active: boolean) => JSX.Element }[] = [
   { key: 'today', label: 'Today', icon: (a) => <TodayIcon active={a} /> },
+  { key: 'timer', label: 'Timer', icon: (a) => <TimerIcon active={a} /> },
   { key: 'history', label: 'History', icon: (a) => <HistoryIcon active={a} /> },
   { key: 'settings', label: 'Settings', icon: (a) => <SettingsIcon active={a} /> }
 ];
@@ -43,6 +44,17 @@ function TodayIcon({ active }: { active: boolean }) {
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2">
       <rect x="4" y="5" width="16" height="16" rx="2.5" />
       <path d="M9 3v4M15 3v4M8 13l2.5 2.5L16 10" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function TimerIcon({ active }: { active: boolean }) {
+  const c = active ? '#22c55e' : '#7c8896';
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2">
+      <circle cx="12" cy="13" r="8" />
+      <path d="M12 9v4l3 2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M9.5 2.5h5M12 5v-2.5" strokeLinecap="round" />
     </svg>
   );
 }

@@ -8,7 +8,7 @@ interface Props {
 
 export function DailyLog({ record, onChange }: Props) {
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-1 gap-3">
       {LOG_DEFS.map((def) => (
         <label
           key={def.key}

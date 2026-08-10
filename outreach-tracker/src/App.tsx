@@ -6,6 +6,7 @@ import { useSettings } from './hooks/useSettings';
 import { useReminder } from './hooks/useReminder';
 import { computeStreak } from './lib/streak';
 import { TodayView } from './components/TodayView';
+import { TimerView } from './components/TimerView';
 import { HistoryView } from './components/HistoryView';
 import { SettingsView } from './components/SettingsView';
 import { NavTabs, type Tab } from './components/NavTabs';
@@ -31,11 +32,29 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-bg">
+    <div className="relative min-h-screen bg-bg">
+      {/* Fixed (not `background-attachment: fixed`, which iOS Safari breaks)
+          full-viewport background photo + dark scrim. Drop your image at
+          public/bg.jpg — see README. */}
+      <div
+        className="fixed inset-0 -z-10 bg-bg bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage:
+            "linear-gradient(180deg, rgba(11,15,20,0.55) 0%, rgba(11,15,20,0.8) 65%, rgba(11,15,20,0.95) 100%), url('/bg.jpg')"
+        }}
+      />
+
       <NotificationBanner onEnabled={() => updateSettings({ notificationsEnabled: true })} />
 
       <main className="mx-auto max-w-md">
         {tab === 'today' && <TodayView date={today} streak={streak} actions={actions} />}
+        {tab === 'timer' && (
+          <TimerView
+            record={actions.record}
+            notificationsEnabled={settings.notificationsEnabled}
+            onSaveBlock={actions.addTimeBlock}
+          />
+        )}
         {tab === 'history' && <HistoryView days={days} />}
         {tab === 'settings' && <SettingsView settings={settings} onUpdate={updateSettings} />}
       </main>
