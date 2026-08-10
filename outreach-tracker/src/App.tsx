@@ -35,7 +35,11 @@ export default function App() {
   }
 
   return (
-    <div className="relative min-h-screen bg-bg">
+    // No bg-bg here: this wrapper is a positioning context (position:
+    // relative), so an opaque background on it would paint above the
+    // fixed, negative-z-index photo layer below and hide it completely.
+    // The photo div's own bg-bg is the fallback color instead.
+    <div className="relative min-h-screen">
       {/* Fixed (not `background-attachment: fixed`, which iOS Safari breaks)
           full-viewport background photo + dark scrim. Drop your image at
           public/bg.jpg — see README. */}
