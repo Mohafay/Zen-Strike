@@ -18,7 +18,7 @@ export function NavTabs({ active, onChange }: Props) {
       className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-surface/95 backdrop-blur"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <div className="mx-auto flex max-w-md items-stretch justify-around">
+      <div className="mx-auto flex max-w-2xl items-stretch justify-around">
         {TABS.map((t) => {
           const isActive = active === t.key;
           return (

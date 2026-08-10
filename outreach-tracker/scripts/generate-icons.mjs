@@ -132,8 +132,6 @@ function encodePNG(size, rgba) {
 const targets = [
   { name: 'icon-192.png', size: 192, rounded: true },
   { name: 'icon-512.png', size: 512, rounded: true },
-  { name: 'maskable-512.png', size: 512, rounded: false, ringScale: 0.78 },
-  { name: 'apple-touch-icon.png', size: 180, rounded: true },
   { name: 'favicon-32.png', size: 32, rounded: true }
 ];
 

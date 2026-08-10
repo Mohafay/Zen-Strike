@@ -52,8 +52,13 @@ export async function getAllDays(): Promise<DayRecord[]> {
 
 export async function getSettings(): Promise<Settings> {
   const db = await getDB();
-  const s = await db.get('settings', SETTINGS_KEY);
-  return s ?? DEFAULT_SETTINGS;
+  const existing = await db.get('settings', SETTINGS_KEY);
+  if (existing) return existing;
+  // First-ever run: lock startDate in now, rather than recomputing "today"
+  // as the default on every future load (which would freeze the email
+  // target ramp at week 1 forever).
+  await db.put('settings', DEFAULT_SETTINGS, SETTINGS_KEY);
+  return DEFAULT_SETTINGS;
 }
 
 export async function putSettings(settings: Settings): Promise<void> {

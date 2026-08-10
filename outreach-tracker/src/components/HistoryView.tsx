@@ -7,9 +7,10 @@ import { WeeklySummary } from './WeeklySummary';
 
 interface Props {
   days: Map<string, DayRecord>;
+  startDate: string;
 }
 
-export function HistoryView({ days }: Props) {
+export function HistoryView({ days, startDate }: Props) {
   const today = todayStr();
   const recent: string[] = [];
   for (let i = 0; i < 14; i++) recent.push(addDays(today, -i));
@@ -17,8 +18,8 @@ export function HistoryView({ days }: Props) {
   return (
     <div className="flex flex-col gap-5 px-4 pb-28 pt-6">
       <h1 className="text-lg font-semibold">History</h1>
-      <WeeklySummary days={days} />
-      <CalendarHeatmap days={days} />
+      <WeeklySummary days={days} startDate={startDate} />
+      <CalendarHeatmap days={days} startDate={startDate} />
 
       <div className="flex flex-col gap-2">
         <h2 className="text-xs font-semibold uppercase tracking-wide text-muted">Recent days</h2>
@@ -31,7 +32,7 @@ export function HistoryView({ days }: Props) {
               </div>
             );
           }
-          const hit = isGroupADone(record);
+          const hit = isGroupADone(record, startDate);
           const timeSeconds = record.timeBlocks.reduce((s, b) => s + b.actualSeconds, 0);
           return (
             <div

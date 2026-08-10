@@ -1,11 +1,14 @@
-export type CounterKey = 'linkedin' | 'emails' | 'followups' | 'upworkApplications';
-export type BooleanKey = 'bookedCall' | 'postedContent';
+export type CounterKey = 'linkedin' | 'emails' | 'upworkApplications';
+// followupsCaughtUp is part of the outreach floor (mandatory); the other two are "daily wins".
+export type BooleanKey = 'followupsCaughtUp' | 'bookedCall' | 'postedContent';
 export type LogKey = 'totalTouches';
 
 export interface CounterDef {
   key: CounterKey;
   label: string;
-  target: number;
+  // Target can vary by date (e.g. a ramp-up schedule), so it's resolved
+  // per-record rather than being a fixed number.
+  getTarget: (date: string, startDate: string) => number;
 }
 
 export interface BooleanDef {
@@ -42,6 +45,7 @@ export interface Settings {
   reminderTime: string; // "HH:MM" 24h local
   notificationsEnabled: boolean;
   remindersOn: boolean;
+  startDate: string; // YYYY-MM-DD, locked in on first launch — anchors the email-target ramp
 }
 
 // Persisted separately (localStorage, not IndexedDB) since it's ephemeral

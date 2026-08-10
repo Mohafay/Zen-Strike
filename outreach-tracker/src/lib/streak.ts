@@ -10,7 +10,7 @@ import { isGroupADone } from './dailyTemplate';
  * the day ends without completion (at which point tomorrow's calculation
  * will correctly stop at yesterday).
  */
-export function computeStreak(byDate: Map<string, DayRecord>, today: string): number {
+export function computeStreak(byDate: Map<string, DayRecord>, today: string, startDate: string): number {
   let streak = 0;
   let cursor = today;
   let first = true;
@@ -22,7 +22,7 @@ export function computeStreak(byDate: Map<string, DayRecord>, today: string): nu
       continue;
     }
     const rec = byDate.get(cursor);
-    const done = rec ? isGroupADone(rec) : false;
+    const done = rec ? isGroupADone(rec, startDate) : false;
 
     if (done) {
       streak += 1;

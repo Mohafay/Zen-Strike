@@ -5,11 +5,12 @@ import type { DayRecord } from '../types';
 
 interface Props {
   days: Map<string, DayRecord>;
+  startDate: string;
 }
 
 // Weekly summary is deliberately input-only (touches, floor-hit days, time
 // invested) — no outcome/result metrics like reply rate.
-export function WeeklySummary({ days }: Props) {
+export function WeeklySummary({ days, startDate }: Props) {
   const today = todayStr();
   const start = weekStart(today);
   const weekDates = daysInRange(start, today);
@@ -20,7 +21,7 @@ export function WeeklySummary({ days }: Props) {
     (sum, r) => sum + r.timeBlocks.reduce((s, b) => s + b.actualSeconds, 0),
     0
   );
-  const floorHitDays = weekRecords.filter(isGroupADone).length;
+  const floorHitDays = weekRecords.filter((r) => isGroupADone(r, startDate)).length;
 
   return (
     <div className="rounded-2xl border border-border bg-surface p-4">

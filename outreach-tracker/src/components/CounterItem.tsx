@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
-import type { CounterDef } from '../types';
 
 interface Props {
-  def: CounterDef;
+  label: string;
+  target: number;
   value: number;
   forced: boolean;
   onBump: (delta: number) => void;
@@ -11,9 +11,9 @@ interface Props {
 
 const LONG_PRESS_MS = 550;
 
-export function CounterItem({ def, value, forced, onBump, onForceToggle }: Props) {
-  const done = forced || value >= def.target;
-  const pct = Math.min(1, value / def.target);
+export function CounterItem({ label, target, value, forced, onBump, onForceToggle }: Props) {
+  const done = forced || value >= target;
+  const pct = Math.min(1, value / target);
   const [pressing, setPressing] = useState(false);
   const [justCompleted, setJustCompleted] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -41,7 +41,7 @@ export function CounterItem({ def, value, forced, onBump, onForceToggle }: Props
 
   const triggerBump = (delta: number) => {
     onBump(delta);
-    const willBeDone = !done && value + delta >= def.target;
+    const willBeDone = !done && value + delta >= target;
     if (willBeDone) {
       setJustCompleted(true);
       setTimeout(() => setJustCompleted(false), 300);
@@ -62,7 +62,7 @@ export function CounterItem({ def, value, forced, onBump, onForceToggle }: Props
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <p className="truncate text-sm font-medium text-white">{def.label}</p>
+            <p className="truncate text-sm font-medium text-white">{label}</p>
             {done && <CheckBadge />}
           </div>
           <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-surface2">
@@ -78,7 +78,7 @@ export function CounterItem({ def, value, forced, onBump, onForceToggle }: Props
         <div className="flex items-center gap-1">
           <button
             type="button"
-            aria-label={`Decrease ${def.label}`}
+            aria-label={`Decrease ${label}`}
             onPointerDown={(e) => e.stopPropagation()}
             onClick={(e) => {
               e.stopPropagation();
@@ -90,11 +90,11 @@ export function CounterItem({ def, value, forced, onBump, onForceToggle }: Props
           </button>
           <div className="w-14 text-center">
             <span className="text-xl font-semibold tabular-nums">{value}</span>
-            <span className="text-xs text-muted">/{def.target}</span>
+            <span className="text-xs text-muted">/{target}</span>
           </div>
           <button
             type="button"
-            aria-label={`Increase ${def.label}`}
+            aria-label={`Increase ${label}`}
             onPointerDown={(e) => e.stopPropagation()}
             onClick={(e) => {
               e.stopPropagation();

@@ -1,4 +1,11 @@
-import { BOOLEAN_DEFS, COUNTER_DEFS, TOTAL_ITEMS, completedCount } from '../lib/dailyTemplate';
+import {
+  FLOOR_BOOLEAN_DEFS,
+  FLOOR_COUNTER_DEFS,
+  TOTAL_ITEMS,
+  WIN_BOOLEAN_DEFS,
+  completedCount,
+  counterTarget
+} from '../lib/dailyTemplate';
 import { friendlyDate } from '../lib/date';
 import type { useDayActions } from '../hooks/useDayActions';
 import { ProgressRing } from './ProgressRing';
@@ -9,12 +16,13 @@ import { DailyLog } from './DailyLog';
 interface Props {
   date: string;
   streak: number;
+  startDate: string;
   actions: ReturnType<typeof useDayActions>;
 }
 
-export function TodayView({ date, streak, actions }: Props) {
+export function TodayView({ date, streak, startDate, actions }: Props) {
   const { record, bumpCounter, toggleForced, toggleBoolean, setLog } = actions;
-  const done = completedCount(record);
+  const done = completedCount(record, startDate);
 
   return (
     <div className="flex flex-col gap-6 px-4 pb-28 pt-6">
@@ -33,21 +41,30 @@ export function TodayView({ date, streak, actions }: Props) {
 
       <section className="flex flex-col gap-3">
         <SectionLabel title="Outreach floor" hint="tap +/− · long-press to force done" />
-        {COUNTER_DEFS.map((def) => (
+        {FLOOR_COUNTER_DEFS.map((def) => (
           <CounterItem
             key={def.key}
-            def={def}
+            label={def.label}
+            target={counterTarget(def.key, date, startDate)}
             value={record.counts[def.key]}
             forced={record.forced[def.key]}
             onBump={(delta) => bumpCounter(def.key, delta)}
             onForceToggle={() => toggleForced(def.key)}
           />
         ))}
+        {FLOOR_BOOLEAN_DEFS.map((def) => (
+          <CheckboxItem
+            key={def.key}
+            label={def.label}
+            checked={record.booleans[def.key]}
+            onToggle={() => toggleBoolean(def.key)}
+          />
+        ))}
       </section>
 
       <section className="flex flex-col gap-3">
         <SectionLabel title="Daily wins" />
-        {BOOLEAN_DEFS.map((def) => (
+        {WIN_BOOLEAN_DEFS.map((def) => (
           <CheckboxItem
             key={def.key}
             label={def.label}

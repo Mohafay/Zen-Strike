@@ -5,11 +5,12 @@ import type { DayRecord } from '../types';
 
 interface Props {
   days: Map<string, DayRecord>;
+  startDate: string;
 }
 
 const WEEKDAY_HEADERS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
-export function CalendarHeatmap({ days }: Props) {
+export function CalendarHeatmap({ days, startDate }: Props) {
   const now = parseDateStr(todayStr());
   const [cursor, setCursor] = useState({ year: now.getFullYear(), month: now.getMonth() });
   const today = todayStr();
@@ -51,7 +52,13 @@ export function CalendarHeatmap({ days }: Props) {
           </div>
         ))}
         {weeks.flat().map((date, i) => (
-          <DayCell key={i} date={date} record={date ? days.get(date) : undefined} isToday={date === today} />
+          <DayCell
+            key={i}
+            date={date}
+            record={date ? days.get(date) : undefined}
+            isToday={date === today}
+            startDate={startDate}
+          />
         ))}
       </div>
 
@@ -67,11 +74,13 @@ export function CalendarHeatmap({ days }: Props) {
 function DayCell({
   date,
   record,
-  isToday
+  isToday,
+  startDate
 }: {
   date: string | null;
   record: DayRecord | undefined;
   isToday: boolean;
+  startDate: string;
 }) {
   if (!date) return <div />;
   const optional = isOptionalDay(date);
@@ -79,7 +88,7 @@ function DayCell({
 
   let bg = 'bg-surface2';
   if (record) {
-    bg = isGroupADone(record) ? 'bg-accent' : 'bg-warn/70';
+    bg = isGroupADone(record, startDate) ? 'bg-accent' : 'bg-warn/70';
   }
 
   return (

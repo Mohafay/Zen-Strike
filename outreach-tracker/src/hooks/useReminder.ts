@@ -21,7 +21,7 @@ export function useReminder(record: DayRecord, settings: Settings, markFired: ()
       const reminderAt = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0, 0);
       if (now < reminderAt) return;
 
-      const missing = missingItemsSummary(record);
+      const missing = missingItemsSummary(record, settings.startDate);
       if (missing.length === 0) return;
 
       try {

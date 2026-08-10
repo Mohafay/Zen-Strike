@@ -81,21 +81,9 @@ export function SettingsView({ settings, onUpdate }: Props) {
       <section className="rounded-2xl border border-border bg-surface p-4 text-xs leading-relaxed text-muted">
         <h2 className="mb-1 text-sm font-semibold text-white">Reliability notes</h2>
         <p>
-          Reminders fire from inside the app with no server or push service behind them, so the app
-          needs to be open (or recently open, in the background) around your reminder time.
-        </p>
-        <p className="mt-2">
-          <span className="text-white">Android / desktop:</span> reliable once installed as a PWA
-          and opened at least occasionally near your reminder time.
-        </p>
-        <p className="mt-2">
-          <span className="text-white">iOS:</span> Safari suspends background tabs and PWAs
-          aggressively, so a reminder may only appear once you actually open the app. Add it to
-          your home screen and consider glancing at it once in the evening.
-        </p>
-        <p className="mt-2">
-          For guaranteed phone reminders regardless of whether the app is open, see the optional
-          Telegram bot section in the README.
+          Reminders fire from inside the app with no server or push service behind them, so Chrome
+          (this tab, or the installed app window) needs to be running on your laptop around your
+          reminder time. If Chrome is fully closed, nothing fires until you next open it.
         </p>
       </section>
 

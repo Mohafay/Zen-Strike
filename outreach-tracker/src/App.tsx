@@ -19,7 +19,10 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('today');
 
   const actions = useDayActions(today, days, upsert);
-  const streak = useMemo(() => computeStreak(days, today), [days, today]);
+  const streak = useMemo(
+    () => computeStreak(days, today, settings.startDate),
+    [days, today, settings.startDate]
+  );
 
   useReminder(actions.record, settings, actions.markReminderFired);
 
@@ -46,8 +49,10 @@ export default function App() {
 
       <NotificationBanner onEnabled={() => updateSettings({ notificationsEnabled: true })} />
 
-      <main className="mx-auto max-w-md">
-        {tab === 'today' && <TodayView date={today} streak={streak} actions={actions} />}
+      <main className="mx-auto max-w-2xl">
+        {tab === 'today' && (
+          <TodayView date={today} streak={streak} startDate={settings.startDate} actions={actions} />
+        )}
         {tab === 'timer' && (
           <TimerView
             record={actions.record}
@@ -55,7 +60,7 @@ export default function App() {
             onSaveBlock={actions.addTimeBlock}
           />
         )}
-        {tab === 'history' && <HistoryView days={days} />}
+        {tab === 'history' && <HistoryView days={days} startDate={settings.startDate} />}
         {tab === 'settings' && <SettingsView settings={settings} onUpdate={updateSettings} />}
       </main>
 

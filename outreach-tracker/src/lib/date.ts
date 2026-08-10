@@ -23,6 +23,11 @@ export function addDays(s: string, delta: number): string {
   return toDateStr(d);
 }
 
+export function daysBetween(fromInclusive: string, toInclusive: string): number {
+  const ms = parseDateStr(toInclusive).getTime() - parseDateStr(fromInclusive).getTime();
+  return Math.round(ms / 86_400_000);
+}
+
 // Only Sunday is optional — Saturday is a normal mandatory day.
 export function isOptionalDay(s: string): boolean {
   return parseDateStr(s).getDay() === 0;
