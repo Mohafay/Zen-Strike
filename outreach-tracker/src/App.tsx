@@ -36,16 +36,17 @@ export default function App() {
   }
 
   return (
-    // No bg-bg here: this wrapper is a positioning context (position:
-    // relative), so an opaque background on it would paint above the
-    // fixed, negative-z-index photo layer below and hide it completely.
-    // The photo div's own bg-bg is the fallback color instead.
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen bg-bg">
       {/* Fixed (not `background-attachment: fixed`, which iOS Safari breaks)
           full-viewport background photo + dark scrim. Drop your image at
-          public/bg.jpg — see README. */}
+          public/bg.jpg — see README.
+          Deliberately no negative z-index: it's the first element in the
+          tree with no z-index set, so normal paint order alone puts it
+          behind everything that follows — no dependency on how the host
+          page's own html/body backgrounds happen to be layered, which is
+          what broke this the first two times. */}
       <div
-        className="fixed inset-0 -z-10 bg-bg bg-cover bg-center bg-no-repeat"
+        className="fixed inset-0 bg-bg bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage:
             "linear-gradient(180deg, rgba(11,15,20,0.55) 0%, rgba(11,15,20,0.8) 65%, rgba(11,15,20,0.95) 100%), url('/bg.jpg')"
