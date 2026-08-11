@@ -11,6 +11,7 @@ import { HistoryView } from './components/HistoryView';
 import { SettingsView } from './components/SettingsView';
 import { NavTabs, type Tab } from './components/NavTabs';
 import { NotificationBanner } from './components/NotificationBanner';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 export default function App() {
   const today = useToday();
@@ -54,18 +55,20 @@ export default function App() {
       <NotificationBanner onEnabled={() => updateSettings({ notificationsEnabled: true })} />
 
       <main className="mx-auto max-w-2xl">
-        {tab === 'today' && (
-          <TodayView date={today} streak={streak} startDate={settings.startDate} actions={actions} />
-        )}
-        {tab === 'timer' && (
-          <TimerView
-            record={actions.record}
-            notificationsEnabled={settings.notificationsEnabled}
-            onSaveBlock={actions.addTimeBlock}
-          />
-        )}
-        {tab === 'history' && <HistoryView days={days} startDate={settings.startDate} />}
-        {tab === 'settings' && <SettingsView settings={settings} onUpdate={updateSettings} />}
+        <ErrorBoundary key={tab}>
+          {tab === 'today' && (
+            <TodayView date={today} streak={streak} startDate={settings.startDate} actions={actions} />
+          )}
+          {tab === 'timer' && (
+            <TimerView
+              record={actions.record}
+              notificationsEnabled={settings.notificationsEnabled}
+              onSaveBlock={actions.addTimeBlock}
+            />
+          )}
+          {tab === 'history' && <HistoryView days={days} startDate={settings.startDate} />}
+          {tab === 'settings' && <SettingsView settings={settings} onUpdate={updateSettings} />}
+        </ErrorBoundary>
       </main>
 
       <NavTabs active={tab} onChange={setTab} />
