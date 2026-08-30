@@ -1,0 +1,20 @@
+[
+  {
+    "location_id": "loc_1",
+    "name": "Riverside Recovery & Wellness",
+    "city": "Austin",
+    "session_price": 120.0
+  },
+  {
+    "location_id": "loc_2",
+    "name": "Northgate MLD Studio",
+    "city": "Denver",
+    "session_price": 100.0
+  },
+  {
+    "location_id": "loc_3",
+    "name": "Harborview Post-Surgical Care",
+    "city": "Charleston",
+    "session_price": 150.0
+  }
+]
