@@ -1,0 +1,207 @@
+{
+  "name": "Automated Booking Agency — Outreach & Scheduling",
+  "flow": [
+    {
+      "id": 1,
+      "module": "google-sheets:watchRows",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": 0
+      },
+      "mapper": {
+        "from": 0,
+        "limit": 10,
+        "sheetId": "Prospects",
+        "includesHeaders": "yes",
+        "valueRenderOption": "FORMATTED_VALUE",
+        "dateTimeRenderOption": "FORMATTED_STRING"
+      },
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        },
+        "restore": {
+          "parameters": {
+            "__IMTCONN__": {
+              "label": "My Google connection",
+              "data": {
+                "scoped": "true",
+                "connection": "google"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "__IMTCONN__",
+            "type": "account",
+            "label": "Connection",
+            "required": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "parameters": {},
+      "mapper": null,
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 3,
+              "module": "gmail:ActionSendEmail",
+              "version": 1,
+              "parameters": {
+                "__IMTCONN__": 0
+              },
+              "mapper": {
+                "to": "{{1.`3`}}",
+                "subject": "Booking Opportunity — {{1.`5`}} for Your {{1.`6`}}",
+                "content": "<p>Hi {{1.`1`}},</p>\n<p>I'm reaching out from <strong>[Your Agency Name]</strong>. We have <strong>{{1.`5`}}</strong> talent available for your upcoming <strong>{{1.`6`}}</strong> on <strong>{{1.`7`}}</strong>.</p>\n<p>I'd love to schedule a quick call to discuss availability and pricing.</p>\n<p><a href=\"[YOUR_CALENDLY_LINK]\">Click here to book a time</a></p>\n<p>Best regards,<br/>[Your Name]<br/>[Your Agency]</p>",
+                "attachments": []
+              },
+              "metadata": {
+                "designer": {
+                  "x": 600,
+                  "y": -150
+                },
+                "restore": {
+                  "parameters": {
+                    "__IMTCONN__": {
+                      "label": "My Gmail connection",
+                      "data": {
+                        "scoped": "true",
+                        "connection": "google-email"
+                      }
+                    }
+                  }
+                },
+                "parameters": [
+                  {
+                    "name": "__IMTCONN__",
+                    "type": "account",
+                    "label": "Connection",
+                    "required": true
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 4,
+              "module": "twilio:ActionMakeCall",
+              "version": 1,
+              "parameters": {
+                "__IMTCONN__": 0
+              },
+              "mapper": {
+                "to": "{{1.`4`}}",
+                "from": "[YOUR_TWILIO_PHONE_NUMBER]",
+                "twiml": "<Response><Say voice=\"alice\">Hello {{1.`1`}}. This is a call from Your Agency Name about your upcoming {{1.`6`}} on {{1.`7`}}. We have {{1.`5`}} talent available. Please check your email to schedule a booking call, or press 1 to speak with an agent now.</Say><Gather numDigits=\"1\" action=\"[YOUR_WEBHOOK_URL]\"><Say>Press 1 to connect.</Say></Gather></Response>"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 600,
+                  "y": 150
+                },
+                "restore": {
+                  "parameters": {
+                    "__IMTCONN__": {
+                      "label": "My Twilio connection",
+                      "data": {
+                        "scoped": "true",
+                        "connection": "twilio"
+                      }
+                    }
+                  }
+                },
+                "parameters": [
+                  {
+                    "name": "__IMTCONN__",
+                    "type": "account",
+                    "label": "Connection",
+                    "required": true
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "module": "google-sheets:updateRow",
+      "version": 2,
+      "parameters": {
+        "__IMTCONN__": 0
+      },
+      "mapper": {
+        "sheetId": "Prospects",
+        "rowNumber": "{{1.__ROW_NUMBER__}}",
+        "values": {
+          "8": "Contacted",
+          "9": "{{now}}"
+        }
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 0
+        },
+        "restore": {
+          "parameters": {
+            "__IMTCONN__": {
+              "label": "My Google connection",
+              "data": {
+                "scoped": "true",
+                "connection": "google"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "__IMTCONN__",
+            "type": "account",
+            "label": "Connection",
+            "required": true
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "us1.make.com"
+  }
+}
